@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Them</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    @font-face {
+      font-family: 'LDRFont';
+      src: url('fonts/LDRFnt.ttf') format('truetype');
+    }
+
+    body {
+      background-color: black;
+      color: white;
+      font-family: 'LDRFont', monospace;
+      margin: 0;
+    }
+
+    .top-bar {
+      background-color: black;
+      height: 60px;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      padding-left: 20px;
+      position: sticky;
+      top: 0;
+      z-index: 999;
+      border-bottom: 1px solid white;
+    }
+
+    .top-bar-icon {
+      height: 40px;
+      image-rendering: pixelated;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+
+    .top-bar-icon:hover {
+      transform: scale(1.1);
+    }
+
+    .content-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding-top: 40px;
+    }
+
+    .them-img {
+      max-width: 90%;
+      image-rendering: pixelated;
+    }
+
+    .desc-columns {
+      display: flex;
+      justify-content: space-between;
+      width: 90%;
+      margin-top: 40px;
+    }
+
+    .column {
+      width: 45%;
+    }
+
+    .title {
+      font-size: 32px;
+      margin-bottom: 20px;
+    }
+
+    .description {
+      white-space: pre-wrap;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="top-bar">
+    <a href="index.html">
+      <img src="img/1.png" alt="Back to Index" class="top-bar-icon">
+    </a>
+  </div>
+
+  <div class="content-wrapper">
+    <img src="img/them.png" alt="Them Image" class="them-img">
+
+    <div class="desc-columns">
+      <!-- Left Column -->
+      <div class="column">
+        <div class="title">Zilo</div>
+        <div class="description">
+          <p>Zilo is the lil' guy you saw at the main page!
+          This guy is a mainframe obsessed guy, speak to him about VM/ESA, he'll spend hours geeking out</p>
+          <p>Doesn't have many friends though...</p>
+        </div>
+      </div>
+
+      <!-- Right Column -->
+      <div class="column">
+        <div class="title">LOADER.DMG</div>
+        <div class="description">
+          <p>LOADER is somewhat the main character in my Twitter!
+          He's a computer program, and trust me, you don't wanna annoy him!</p>
+          <p>His creator didn't meant for him to become self aware...</p>
+        </div>
+      </div>
+    </div>
+
+      <div class="them-container">
+<br><br><br>
+    <div class="them-title">Who are them?</div>
+    <div class="them-text">
+Both of these guys represent both my Hardware knowledge (Zilo) and Software knowledge (LOADER.DMG) <br>
+<br>
+Zilo is a bat who is way into hardware, either that being old from the late 70's, or as new as today's hardware!<br>
+<br>
+LOADER.DMG is a computer program that focuses a lot in the code and structure of programs, he actually
+came from a Macintosh 512K, therefore the .DMG at the end!<br>
+<br>
+Both of them are introverted and reflect a bit of my personality!<br>
+    </div>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,77 @@
+/* lololololol*/
+body {
+    margin: 0;
+    background-color: black;
+    color: white;
+    font-family: monospace; /* fits pixel art aesthetic, I like pixels */
+    text-align: center;
+}
+
+/* lil Zilo banner here */
+.banner {
+    width: 1366px;
+    height: 500px;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+    display: block;
+    margin: 0 auto;
+    cursor: pointer;
+}
+
+.social-row {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    align-items: center;
+}
+
+.social-row img {
+    width: 48px; /* adjust to your actual logo size */
+    height: 48px;
+    image-rendering: pixelated;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.social-row img:hover {
+    transform: scale(1.1);
+}
+
+.social-row img[alt="Discord"] {
+    cursor: default;
+}
+
+.top-bar {
+    background-color: black;
+    height: 60px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding-left: 20px;
+    position: sticky;
+    top: 0;
+    z-index: 999;
+    border-bottom: 1px solid white;
+}
+
+.top-bar-icon {
+    height: 40px;
+    image-rendering: pixelated;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    margin-right: 10px;
+}
+
+.top-bar-icon:hover {
+    transform: scale(1.1);
+}
+
+
+/* Optional responsive limit */
+@media (max-width: 1366px) {
+    .banner {
+        width: 100%;
+        height: auto;
+    }
+}

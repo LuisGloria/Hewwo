@@ -1,9 +1,15 @@
 /* lololololol*/
+
+@font-face {
+    font-family: 'LDRFont';
+    src: url('fonts/LDRFnt.ttf') format('truetype');
+}
+
 body {
     margin: 0;
     background-color: black;
     color: white;
-    font-family: monospace; /* fits pixel art aesthetic, I like pixels */
+    font-family: 'LDRFont', monospace; /* fits pixel art aesthetic, I like pixels */
     text-align: center;
 }
 

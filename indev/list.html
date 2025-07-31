@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Track List</title>
+  <link rel="icon" type="image/png" href="img/favicon.png">
+  <link rel="stylesheet" href="../styles.css">
+
+  <style>
+    @font-face {
+      font-family: 'LDRFont';
+      src: url('../fonts/LDRFnt.ttf') format('truetype');
+    }
+
+    body {
+      background-color: black;
+      color: white;
+      font-family: 'LDRFont', monospace;
+      margin: 0;
+      padding: 40px 0;
+      text-align: center;
+    }
+
+    .top-bar {
+      background-color: black;
+      height: 60px;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      padding-left: 20px;
+      position: sticky;
+      top: 0;
+      z-index: 999;
+      border-bottom: 1px solid white;
+      margin-top: -40px;
+    }
+
+    .top-bar-icon {
+      height: 40px;
+      image-rendering: pixelated;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+      margin-right: 10px;
+    }
+
+    .track-img {
+      display: block;
+      margin: 20px auto;
+      image-rendering: pixelated;
+      max-width: 100%;
+      height: auto;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+
+    .track-img:hover {
+      transform: scale(1.05);
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="top-bar">
+    <a href="../index.html">
+      <img src="../img/1.png" alt="Back to Index" class="top-bar-icon">
+    </a>
+  </div>
+
+  <a href="sng1.html">
+    <img src="assets/SNG1.png" alt="Song 1" class="track-img">
+  </a>
+
+  <a href="sng2.html">
+    <img src="assets/SNG2.png" alt="Song 2" class="track-img">
+  </a>
+
+</body>
+</html>

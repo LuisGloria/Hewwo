@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rollerdisco Rumble</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body, html {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: sans-serif;
+      background-color: black
+    }
+
+    .bar {
+      position: fixed;
+      left: 0;
+      width: 100%;
+      background-color: white;
+      z-index: 9999; /* big ahh z-index*/
+    }
+
+    /* Individual bars */
+    .bar-544 { top: 480px; height: 10px; }
+    .bar-463 { top: 399px; height: 5px; }
+    .bar-394 { top: 330px; height: 1px; }
+    .bar-334 { top: 270px; height: 1px; }
+    .bar-322 { top: 258px; height: 1px; }
+    .bar-264 { top: 200px; height: 1px; }
+    .bar-64  { top: 0px;  height: 1px; }
+    .bar-36  { top: -29px; height: 2px; } /* 36 - 65 = -29, why did I coment this? I hate math */
+    .bar-107 { top: 42px;  height: 3px; }
+    .bar-283 { top: 218px; height: 3px; }
+
+    .game-container {
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .background-layer {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('assets/bg.png');
+      background-size: cover;
+      background-position: center;
+      z-index: 0;
+      transition: transform 0.2s ease;
+    }
+
+    .foreground-layer {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 10000; /* bigger ahh z-index */
+    }
+
+    .character-wrapper {
+      position: relative;
+      z-index: 10000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .character {
+      width: 150px;
+      height: auto;
+      margin-top: 300px;
+    }
+
+    .note-layer {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 5000;
+      margin-top: 150px;
+    }
+
+
+    .note {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 50px;
+      height: auto;
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
+    }
+
+    .note.left {
+      left: 0;
+    }
+
+    .note.right {
+      right: 0;
+    }
+
+    .hit-line {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background-color: red;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 9998;
+      opacity: 0.5;
+    }
+
+    .feedback-layer {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 1000000; /* Expand you mind, Omori! */
+    }
+
+    .feedback-img {
+      position: absolute;
+      opacity: 1;
+      animation: fadeOut 1s ease-out forwards;
+      height: 64px;
+      image-rendering: pixelated;
+    }
+
+    @keyframes fadeOut {
+      0% { opacity: 1; }
+      100% { opacity: 0; transform: translateY(-20px); }
+    }
+
+    .stats-bar {
+      position: absolute;
+      bottom: 10px;
+      width: 100%;
+      text-align: center;
+      font-family: monospace;
+      font-size: 20px;
+      color: white;
+      background-color: rgba(0, 0, 0, 0.4);
+      padding: 8px 0;
+      z-index: 100;
+      pointer-events: none;
+    }
+
+    @keyframes pulsate-tilt {
+      0% {
+        transform: scale(1) rotate(0deg);
+      }
+      50% {
+        transform: scale(1.1) rotate(var(--tilt-angle));
+      }
+      100% {
+        transform: scale(1) rotate(0deg);
+      }
+    }
+
+    .pulsate-tilt {
+      animation: pulsate-tilt 0.1s ease-in-out;
+    }
+
+
+  </style>
+</head>
+<body>
+
+  <div class="bar bar-544"></div>
+  <div class="bar bar-463"></div>
+  <div class="bar bar-394"></div>
+  <div class="bar bar-334"></div>
+  <div class="bar bar-322"></div>
+  <div class="bar bar-264"></div>
+  <div class="bar bar-64"></div>
+  <div class="bar bar-36"></div>
+  <div class="bar bar-107"></div>
+  <div class="bar bar-283"></div>
+
+  <div class="background-layer"></div>
+    <div class="foreground-layer">
+    <div class="hit-line"></div>
+    <div class="note-layer"></div>
+    <div class="character-wrapper">
+    <div class="feedback-layer"></div>
+      <img class="character" src="assets/IDLE.gif" alt="Character Idle">
+    </div>
+  </div>
+
+  <script>
+
+    const HITBOX_X = window.innerWidth / 2;
+
+    const character = document.querySelector('.character');
+    const background = document.querySelector('.background-layer');
+
+    let keyPressed = null;
+    let moveAmount = 50;
+
+    let totalNotesAttempted = 0;
+    let successfulHits = 0;
+    let breaks = 0;
+    let combo = 0;
+    let maxCombo = 0;
+    let weightedHitSum = 0;
+
+    new Audio('music/rollerdisco.mp3').play().catch(err => {
+      console.warn('Autoplay failed:', err);
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (!window._musicStarted) {
+        new Audio('music/song.mp3').play().catch(err => {
+          console.warn('Autoplay failed:', err);
+        });
+        window._musicStarted = true;
+      }
+      // Handle movement keys first
+      if (keyPressed !== e.code) {
+        if (e.code === 'ArrowRight') {
+          character.src = 'assets/right.gif';
+          background.style.transform = `translateX(-${moveAmount}px)`;
+          keyPressed = e.code;
+          return;  // Exit early since movement handled
+        } else if (e.code === 'ArrowLeft') {
+          character.src = 'assets/left.gif';
+          background.style.transform = `translateX(${moveAmount}px)`;
+          keyPressed = e.code;
+          return;  // Exit early
+        }
+      }
+
+      // Handle Space for hitting notes, is probably fucked
+      if (e.code === 'Space') {
+        const now = performance.now();
+        const elapsed = now - startTime;
+
+        for (let i = 0; i < notes.length; i++) {
+          const note = notes[i];
+          const el = note.element;
+          const noteTime = note.type === 'tap' ? note.time : note.start;
+
+          const elX = parseFloat(el.style.left);
+          const noteCenter = elX + (el.offsetWidth / 2);
+
+          if (Math.abs(noteCenter - HITBOX_X) <= HIT_WINDOW) {
+            note.hit = true;  // mark note as hit before processing
+            hitNote(note);
+            el.remove();
+            notes.splice(i, 1);
+            break;
+          }
+        }
+      }
+    });
+
+    document.addEventListener('keyup', (e) => {
+      if (e.code === 'ArrowRight' || e.code === 'ArrowLeft') {
+        character.src = 'assets/IDLE.gif';
+        background.style.transform = `translateX(0px)`;
+        keyPressed = null;
+      }
+    });
+
+    function timeStringToMs(timeStr) {
+      const [hms, ms] = timeStr.split(',');
+      const [hh, mm, ss] = hms.split(':').map(Number);
+      const totalMs = ((hh * 3600 + mm * 60 + ss) * 1000) + Number(ms);
+      console.log(`Parsing time '${timeStr}' → ${totalMs} ms`);
+      return totalMs;
+    }
+
+
+    function parseNoteLine(line) {
+      line = line.trim();
+      if (!line || line.startsWith('#')) return null;
+
+      const [timePart, lanePart] = line.split('|').map(s => s.trim());
+      const lane = lanePart === 'L' ? 'left' : 'right';
+
+      if (timePart.includes('-')) {
+        const [startStr, endStr] = timePart.split('-').map(s => s.trim());
+        return {
+          type: 'hold',
+          lane,
+          start: timeStringToMs(startStr),
+          end: timeStringToMs(endStr)
+        };
+      } else {
+        return {
+          type: 'tap',
+          lane,
+          time: timeStringToMs(timePart)
+        };
+      }
+    }
+
+    const noteFileContent = `
+    00:00:01,22 | R
+    00:00:02,00 | L
+    00:00:02,82 | L
+    00:00:03,22 | R
+    00:00:04,91 | R
+    00:00:05,93 | R
+    00:00:06,00 | L
+    00:00:06,53 | L
+    00:00:07,01 | L
+    00:00:08,01 | R
+    `;
+
+    /* "00:00:04,91 - 00:00:05,29 | R"  -- Do not use long notes, they're fucked*/
+
+    const noteLines = noteFileContent.split('\n');
+    const notes = [];
+
+    const noteLayer = document.querySelector('.note-layer');
+    const startTime = performance.now();
+    const hitY = 400; // Y-position where the character stands, I should change this maybe
+    const noteScrollSpeed = 0.5; // Pixels per ms
+
+    function renderNoteElement(note) {
+      const NOTE_HEIGHT = 50;
+
+      if (note.type === 'tap') {
+        const el = document.createElement('img');
+        el.classList.add('note', note.lane);
+        el.src = 'assets/hp1.png';
+        el.style.height = `${NOTE_HEIGHT}px`;
+        el.dataset.time = note.time;
+        el.dataset.type = note.type;
+        note.element = el;
+        noteLayer.appendChild(el);
+      } else if (note.type === 'hold') {
+        const container = document.createElement('div');
+        container.classList.add('note', note.lane);
+        container.dataset.time = note.start;
+        container.dataset.type = note.type;
+        container.style.display = 'flex';
+        container.style.alignItems = 'center';
+        container.style.position = 'absolute';
+        container.style.top = '50%';
+        container.style.transform = 'translateY(-50%)';
+
+        const startImg = document.createElement('img');
+        startImg.src = 'assets/hp1.png';
+        startImg.style.height = `${NOTE_HEIGHT}px`;
+        startImg.style.flexShrink = '0';
+
+        const middleImg = document.createElement('img');
+        middleImg.src = 'assets/hp2.png';
+        middleImg.style.height = `${NOTE_HEIGHT}px`;
+        //prevent clipping the first pixel
+        middleImg.style.width = `${(note.end - note.start) * noteScrollSpeed + 1}px`;
+        middleImg.style.flexShrink = '0';
+        middleImg.style.objectFit = 'fill'; // Optional: prevent distortion, this might've not worked.
+
+        const endImg = document.createElement('img');
+        endImg.src = 'assets/hp3.png';
+        endImg.style.height = `${NOTE_HEIGHT}px`;
+        endImg.style.flexShrink = '0';
+
+        // Flip end cap if note is on the right
+        if (note.lane === 'right') {
+          endImg.style.transform = 'scaleX(-1)';
+        }
+
+        container.appendChild(startImg);
+        container.appendChild(middleImg);
+        container.appendChild(endImg);
+
+        note.element = container;
+        noteLayer.appendChild(container);
+      }
+    }
+
+
+
+    for (const line of noteLines) {
+      const note = parseNoteLine(line);
+      if (note) notes.push(note);
+    }
+
+    notes.forEach(renderNoteElement);
+
+    console.log('Parsed notes:', notes);
+
+    const missThreshold = 150;
+
+    function updateNotes() {
+      const now = performance.now();
+      const elapsed = now - startTime;
+      const hitX = window.innerWidth / 2;
+
+      for (const note of notes) {
+        if (note.hit) continue; // Skip already hit notes, lol
+
+        const el = note.element;
+        const noteTime = note.type === 'tap' ? note.time : note.start;
+        const timeUntilHit = noteTime - elapsed;
+        const distance = timeUntilHit * noteScrollSpeed;
+
+        // Move the note
+        if (note.lane === 'left') {
+          el.style.left = `${Math.min(hitX, Math.max(0, hitX - distance))}px`;
+        } else if (note.lane === 'right') {
+          el.style.left = `${Math.max(hitX, Math.min(window.innerWidth, hitX + distance))}px`;
+        }
+
+        // Check for misses cuz' you bad on rhythm gamez
+        if (timeUntilHit < -missThreshold && !note.hit) {
+          note.hit = true;
+          el.remove();
+          combo = 0;
+          breaks++;
+          totalNotesAttempted++;
+          updateStatsBar();
+          console.log('Missed note at', noteTime);
+        }
+      }
+
+      requestAnimationFrame(updateNotes);
+    }
+
+    updateNotes();
+
+    const HIT_WINDOW = 200;
+
+    document.addEventListener('keydown', (e) => {
+      if (e.code === 'Space') {
+        const now = performance.now();
+        const elapsed = now - startTime;
+
+        for (let i = 0; i < notes.length; i++) {
+          const note = notes[i];
+          const el = note.element;
+          const noteTime = note.type === 'tap' ? note.time : note.start;
+
+          const elX = parseFloat(el.style.left);
+          const noteCenter = elX + (el.offsetWidth / 2);
+
+          if (Math.abs(noteCenter - HITBOX_X) <= HIT_WINDOW) {
+            hitNote(note); // THIS triggers judgment and the feedback...I hope
+            el.remove();
+            notes.splice(i, 1);
+            break;
+          }
+        }
+      }
+    });
+
+    function hitNote(note) {
+      const now = performance.now();
+      const diff = Math.abs(note.time - (now - startTime));
+
+      let feedback;
+      let weight = 0;
+
+      if (diff < 50) {
+        feedback = "perfect";
+        weight = 1.0;
+        combo++;
+        successfulHits++;
+      } else if (diff < 100) {
+        feedback = "nice";
+        weight = 0.75;
+        combo++;
+        successfulHits++;
+      } else if (diff < 200) {
+        feedback = "ass";
+        weight = 0.5;
+        combo++;
+        successfulHits++;
+      } else {
+        feedback = "miss";
+        weight = 0.0;
+        combo = 0;
+        breaks++;
+      }
+
+      totalNotesAttempted++;
+      weightedHitSum += weight;
+      maxCombo = Math.max(maxCombo, combo);
+
+      updateStatsBar();
+      showFeedback(feedback);
+
+      // Pulsate + tilt effect:
+      const statsBar = document.querySelector('.stats-bar');
+
+      // Pick a random tilt angle ±25deg
+      const angle = (Math.random() < 0.5 ? -1 : 1) * 1;
+      statsBar.style.setProperty('--tilt-angle', `${angle}deg`);
+
+      // Restart animation
+      statsBar.classList.remove('pulsate-tilt');
+      void statsBar.offsetWidth; // trigger reflow
+      statsBar.classList.add('pulsate-tilt');
+    }
+
+
+    function showFeedback(type) {
+      const feedback = document.createElement('img');
+      feedback.src = `assets/${type}.png`;
+      feedback.classList.add('feedback-img');
+
+      const character = document.querySelector('.character');
+      const wrapper = document.querySelector('.character-wrapper');
+      const charRect = character.getBoundingClientRect();
+      const wrapperRect = wrapper.getBoundingClientRect();
+
+      // Position relative to wrapper
+      const offsetX = charRect.left - wrapperRect.left + (charRect.width / 2 + 600);
+      const offsetY = charRect.top - wrapperRect.top + (charRect.height / 2 - 100);
+
+      feedback.style.left = `${offsetX}px`;
+      feedback.style.top = `${offsetY}px`;
+      feedback.style.transform = 'translate(-50%, -50%)'; // Centered both axes
+
+      const layer = document.querySelector('.feedback-layer');
+      layer.appendChild(feedback);
+
+      setTimeout(() => feedback.remove(), 1000);
+    }
+
+    function updateStatsBar() {
+      const acc = totalNotesAttempted > 0 ? (weightedHitSum / totalNotesAttempted) * 100 : 0;
+      const accString = acc.toFixed(2).replace('.', ',');
+
+      let rating;
+      if (acc === 100) rating = "P (Perfect!!)";
+      else if (acc >= 95) rating = "S+ (Hell yeah!!)";
+      else if (acc >= 90) rating = "S (Hell yea!)";
+      else if (acc >= 85) rating = "A (Amazing!)";
+      else if (acc >= 80) rating = "A- (Amazing!)";
+      else if (acc >= 75) rating = "B (Good.)";
+      else if (acc >= 70) rating = "B- (Good.)";
+      else if (acc >= 65) rating = "C (Good enough.)";
+      else if (acc >= 60) rating = "C- (Good enough.)";
+      else if (acc >= 50) rating = "D (Oh boy...)";
+      else if (acc >= 45) rating = "D- (Please leave...)";
+      else if (acc >= 40) rating = "F (Exit's right there)";
+      else rating = "F- (My ears are bleeding)";
+
+      document.querySelector('.stats-bar').textContent =
+        `BIGGEST COMBO: ${maxCombo.toString().padStart(3, '0')} | ` +
+        `COMBO BREAKS: ${breaks.toString().padStart(2, '0')} | ` +
+        `ACC: ${accString}% | ` +
+        `RATING: ${rating}`;
+    }
+
+    function updateAccuracy() {
+      const totalAttempts = totalHits + totalMisses;
+      if (totalAttempts === 0) return 0;
+
+      const acc = (totalHits / totalAttempts) * 100;
+      return acc.toFixed(2);
+    }
+
+  </script>
+
+</body>
+
+  <div class="stats-bar">
+    BIGGEST COMBO: ??? | COMBO BREAKS: ??? | ACC: ??,??% | RATING: ??
+  </div>
+</html>

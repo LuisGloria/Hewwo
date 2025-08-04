@@ -1,0 +1,265 @@
+This all started when Retrospecter said the following:
+"if GF from fnf weighs 900 lbs according to the devs, what would that make BF weigh :PES_think:"
+
+and then someone replied:
+"How dense are they is my question"
+
+And so my MatPat brain kicked in, and so here's my essay on all possible questions you all might have:
+
+--- 1 - How dense?
+
+Well...since GF wights in 900lbs, I'll just assume her volume because I don't know the canon height, I'll assume 5'3'' which converted is about 1.6m
+
+If I do some conversion 900lbs is 408.24Kg
+And if I do some more weird stuff:
+
+Density[GF] = Mass/Volume = 408.24Kg/0.066m³, this is about 6185.45kg/m³.
+
+So she's 5x denser than a human, and close to iron (~7,800 kg/m³).
+GF is basically made of dense rock or light metal lol
+I probably shouldn't have choosen to take physiscs class back in sophomore year
+Now that I think of, no wonder why BF is so attraced to her, her gravitational pull is too strong.
+
+If she jumps, I expect an earthquake
+
+
+
+--- 2 - How many Netons?
+
+And if we use Netwton's 2nd law:
+
+F = ma
+F = 408 * 9.81 = 4000N
+
+Let’s say she lands from just 0.5 meters high, it cannot be that bad...right? Well...
+
+F = mv/t
+v = sqrt(2gh) = sqrt(2 * 9.81 * 0.5) that's about 3.13 m/s
+So...the impact force:
+
+F= 408*3.13/0.1 = 12770N
+
+
+
+--- 3 - Singularity?
+
+By this point someone said "she's 87 foot long" which got me thinking...can that cause a singularity?
+Well...
+
+Okay so...to calculate this Imma use The Schwarzschild Radius
+
+r²=2GM/c²
+
+where:
+G = 6.674 * 10⁻¹¹m³/kg * s² (the gravital constant)
+M is the mass in kg
+c  = 310⁸m/s (A.K.A the speed of light)
+rₛ is in meters
+
+And now we can calculate our Geef Fried:
+
+rₛ=2 * 6.674×10⁻¹¹ * 408.2​ / (3 * 10⁸)² which is about...6.0510⁻²⁵m
+
+So...To form a singularity all 408.2 kg of Geef Fried would need to be compressed into a space smaller than 0.000000000000000000000000605 meters
+
+HOWEVER!
+
+If she kept the same density as normal GF (~6,185 kg/m³), and scaled up to 87 feet tall...
+We can estimate her volume by human scaling
+Humans scale with the cube of their height and if original GF is ~1.6 m and 408 kg...
+
+New volume would be:
+
+V[new] = V[old] * (26.5/1.6)³ = 0.066 * 4578 which is about 302m³
+And her mass:
+
+M = p * v = 6185 * 302 which is about 1868000kg
+That's massive
+
+re-doing the Schwarzschild radius with that:
+rₛ= 2 * 6.674×10⁻¹¹ * 1.87*10⁶ / (3 * 10⁸)² which is about 2.77×10⁻²¹m
+
+Still super tiny so no singularity (damn...) but she could start triggering localized tectonic damage just by walking
+
+
+
+--- 4 - The pull?
+
+Alright so, I've been thinking, what is the gravitational force GF exerts on BF?
+Well, I'll use Newton's Law of Universal Gravitation to check it out:
+
+We know that Newton's gravitational Law goes by this formula:
+
+F = G* m[1] * m[2] / r²
+
+Where:
+
+F = gravitational force in Newtons
+G = 6.674 * 10⁻¹¹ Nm²/Kg² which is the Universal Gravitation Constant
+m[1] = mass of GF in kg
+m[2] = mass of BF in kg
+r = distance between them in meters
+
+So, let's replace the values:
+
+GF's mass (m[1]) = 408 kg
+BF's mass (m[2]) = I'm going to assume 200lb (90.7kg) because we all know he's a fatass
+Distance r = 1 meter (Let's say they're just casually side by side)
+
+Replacing the formula:
+
+F=6.674 * 10⁻¹¹ * 408 * 90.7 / 1²
+That would be around: 2.47*10⁻⁶N or 0.00000247 Newtons
+That's...barely anything
+
+So yeah, BF is atracted to GF because he really likes her, not because of the gravitational pull
+
+
+
+--- 5 - Kinetic Energy?
+
+We can calculate the Kinetic energy by the following formula:
+
+KE= 1/2*mv2
+
+But since we’re dealing with free fall from a building, we can find velocity at impact using:
+
+v = sqrt(2gh)
+
+So adding that to our original formula it would be something like:
+
+KE= 1/2*m(2gh) = mgh
+
+As I said before **pure free fall with no air resistance**, kinetic energy at impact equals gravitational potential energy at the start.
+
+Alright, let's replace everything with nums:
+
+Mass (m) = 408.2kg
+g = 9.81 m/s²
+h = let's say she's falling from a 10 story building lol (around 30 meters)
+
+KE = 408.2 * 9.81 * 30 which is about 120176 J
+
+That's aprox. 12000 Joules of energy!
+That’s about the same energy as:
+
+A small car hitting a wall at 30–40 km/h or detonating 29 grams of TNT
+
+BUT
+
+What if she's kaiju-sized? (87 foot)?
+
+Well...KE=1.87*10⁶*9.81*30 which is about 550 * 10⁶ J
+yup, 550 MILLION JOULES
+
+That's about detonating 131 kg of TNT
+SHE'S A TACTICAL BOMB!
+
+
+
+--- 6 - Terminal Velocity?
+
+Okay, strap in, thing are gonna get *funky*
+
+So, to calculate the Terminal Velocity we use this formula:
+
+v[t] = sqrt(2mg/ρAC[d])
+
+where:
+
+m = mass(kg)
+g = 9.81 m/s²
+ρ = air density (around 1.225 kg/m³ at sea level)
+A = cross-sectional area (m²)
+C[d] drag coefficient (dimensionless)
+
+CASE1 - canon weight, assumed 5'3'' height
+
+C[d] = 1.0 (rough human ina spread position between skydiver and boxy object)
+Cross-sectional area is around torse/shoulders facing down.
+Let's estimate A = 0.5m² (tipical human-ish)
+
+Let's replace everything:
+
+v[t] = sqrt(2*408*9.81/1.225*0.5*1.0) which is around 144.3m/s
+
+Converting that into something most people understand:
+144m/s is round 410km/h or 255mph
+
+"Gotta go fast" am I right?
+
+CASE2 - Kaiju Sized:
+
+Grab another formula:
+A[Kaiju] = 0.5*(26.5/1.6²) which is around 137m²
+
+Replace that in the same formula I've shown before:
+
+v[t] = sqrt(2*1.87*10⁶*9.81/1.225*137*1.0) that's about 468.5m/s
+
+468 m/s = 1,684 km/h = Mach 1.37
+She's BREAKING the sound barrier by belly-flopping from the sky!
+
+If you hear an EAS alert, dw, that's just Kaiju-sized GF falling (run).
+
+
+
+--- 7 - How much sound energy does a 1.87 million kg kaiju GF release when she claps??
+
+Let’s break it down:
+
+Sound power is energy per second (Watts), and loud claps (from humans) typically range from 120 to 130 dB SPL at close range.
+
+But we’re talking Kaiju GF, so...We want to estimate acoustic power (P) released, and then maybe convert it into SPL (Sound Pressure Level).
+
+A typical human clap is ~130 dB at ~1m → ~2 Watts of acoustic power (yes, surprisingly high!)
+
+Sound power roughly scales with the square of force applied (and GF’s hands are massive)
+
+
+Let's say...
+
+Human hands slap together with ~100 N of force
+
+Kaiju GF could easily slap with 10⁶ N or more (that’s lowballing it — remember her mass is 1.87×10⁶ kg)
+
+Okay, let's grab the formulas again:
+
+To scale power output:
+
+P[gf] aprox. P[human] * (F[gf]/F[human])²
+P[gf] aprox. 2*(10⁶/10²) = 2*10⁸ Watts
+
+Aight, convert that to dB:
+
+L = 10 log[10] (P/P[o])
+
+Where P[0] = 10⁻¹²W (reference sound power level)
+
+L= 10 log[10] (2*10⁸/10⁻¹²) = 10 log[10] (2 * 10²⁰) which is around 203dB SPL
+
+Conclusion:
+203 dB SPL at 1 meter
+
+In perspective that's:
+
+Louder than a Saturn V rocket at launch
+
+Above the threshold of death for human ears (~185 dB)
+
+Enough to rupture lungs, flatten structures, and make eardrums explode in a 200-meter radius
+
+Got hearing protection or hearing aid? You'll need them.
+
+
+
+
+
+
+
+--- END - The Conclusion?
+
+So with that said...
+HELLO INTERNET, WELCOME TO FRIDAY NIGHT THEORY The only show that proves that Beef Fried might need a spacesuit whenever hanging with her GF!
+
+If you your GF is kaiju-Sized, make sure you make your prayers every single day.

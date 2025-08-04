@@ -253,6 +253,86 @@ Got hearing protection or hearing aid? You'll need them.
 
 
 
+--- 8 - Compton Wavelength???
+
+Y'know what? Nah, we're not done yet.
+
+The Compton wavelength λ[C]​ of an object is given by:
+λ[C] = h/mc
+
+Where:
+
+h = Planck’s constant which is 6.626*10⁻³⁴J*Hz⁻¹
+m = Mass in kg
+c = Speed of light
+
+CASE1 - canon weight, assumed 5'3'' height
+
+λ[C] = 6.626*10⁻³⁴/ 408.2*3.00*10⁸
+     = 6.626*10⁻³⁴/ 1.2246*10¹¹
+     = 5.41*10⁻⁴⁵ meters
+
+That’s 0.00000000000000000000000000000000000000000000541 meters!
+
+Smol. This is many, many orders of magnitude smaller than a proton. Canon GF’s quantum wavelength is effectively zero for all practical purposes, meaning:
+
+No quantum weirdness like noticeable wave behavior. (damn...)
+
+CASE2 - Kaiju Sized
+
+Let's try by replacing with the new data:
+
+λ[C] = 6.626*10⁻³⁴/ 1.87*10⁶*3.00*10⁸
+     = 6.626*10⁻³⁴/ 5.61*10¹⁴
+     = 1.18*10⁴⁸ meters
+
+Even smaller.
+
+Conclusion:
+
+GF’s Compton wavelength is hella tiny, She so thicc, even quantum mechanics says "nah I’m out."
+
+
+
+
+--- 9 - If GF Emits Hawking Radiation, What’s Her Half-Life???
+
+Let’s say GF is a black hole.  (help me, IDK what I'm saying anymore)
+From my earlier calcs, she'd need to be compressed into 6*10⁻²⁵m radius
+
+Here's the black hole evaporation time formula:
+
+t = 5120πG²M³/ℏc⁴
+
+So let's replace the values:
+
+M = 408.2kg
+Constants = To cursed to type without summoning Stephen Hawking himself
+
+Result: t = 1.3*10⁻¹³ seconds
+
+She'd vanish before finishing the first beat drop lmao
+
+
+
+
+--- 10 - something something Planck Density something something
+
+Planck density is represented by:
+
+ρ[P] = c⁵/ℏG² which is around 5.1*10⁹⁶kg/m³
+
+Let’s compress GF to that. Volume becomes:
+V = m/ρ[P]
+  = 408.2 / 5.1*10⁹⁶
+  = 8*10⁻⁹⁵m³
+
+This a sphere with radius:
+
+r = (3V/4π)
+  = 2.7*10⁻³²m
+
+Conclusion: IDK
 
 
 

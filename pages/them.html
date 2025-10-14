@@ -186,7 +186,7 @@
   items.forEach(item => {
     item.addEventListener('click', () => {
       const id = item.getAttribute('data-target');
-      windowImg.src = `img/them/o${id}.gif`;
+      windowImg.src = `../img/them/o${id}.gif`;
       windowImg.onload = () => {
         windowBox.style.width = (windowImg.naturalWidth + 4) + 'px'; // +4 for borders
         windowBox.style.height = 'auto';

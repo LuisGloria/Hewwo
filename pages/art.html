@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Art</title>
+  <link rel="icon" type="../image/png" href="../img/favicon.png">
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    @font-face {
+      font-family: 'LDRFont';
+      src: url('../fonts/LDRFnt.ttf') format('truetype');
+    }
+  </style>
+
+<div class="top-bar">
+    <a href="index.html">
+    <img src="../img/1.png" alt="Go to Them" class="top-bar-icon">
+  </a>
+</div>
+
+<!-- Container for images -->
+<div id="gallery"></div>
+
+<script>
+  // List all images here
+  const images = [
+    '../art/art1.png',
+    '../art/art2.png',
+    '../art/art3.png',
+    '../art/art4.png',
+    '../art/art5.png',
+    '../art/art6.png',
+    '../art/art7.png',
+    '../art/art8.png',
+    '../art/art9.png',
+    '../art/art10.png',
+    '../art/art11',
+    '../art/art12',
+    '../art/art13',
+    '../art/art14',
+    '../art/art15',
+    '../art/art16',
+    '../art/art17.png',
+    '../art/art18.png',
+    '../art/art19.png',
+    '../art/art20.png',
+    '../art/art21.png',
+    '../art/art22.png',
+    '../art/art23.png'
+  ];
+
+  const gallery = document.getElementById('gallery');
+
+  images.forEach(src => {
+    const img = document.createElement('img');
+    img.src = src;
+    img.style.display = 'block'; // stacks images vertically
+    img.style.marginBottom = '10px'; // optional spacing
+    gallery.appendChild(img);
+  });
+</script>
+
+<style>
+  body {
+    background-color: black;
+    color: white;
+    font-family: monospace;
+    margin: 0;
+    padding: 0;
+  }
+
+  #gallery {
+    padding: 10px;
+  }
+
+  #gallery img {
+    max-width: 100%;      /* optional: prevents overflow */
+    display: block;       /* stacks images vertically */
+    margin: 0 auto 10px;  /* centers images horizontally and adds 10px bottom spacing */
+  }
+</style>

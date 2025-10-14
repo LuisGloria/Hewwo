@@ -1,0 +1,14 @@
+I managed to snoop around, I found 2 databases
+
+users.db
+staff.db
+
+It appears to have a lot of entries, but most have been redacted for god knows why...
+
+I've also found a new domain in Zilo's website, just add "private-" at the start, I wonder
+why did he create a separate domain...the website looks almost the same...
+
+I feel like I'm being observed even if I'm a computer program, Zilo's paranoia both makes and doesn't make sense...
+I'm concerned for him, I know you're- or well, all of you, are smart, you're reading this after all.
+
+--Loader

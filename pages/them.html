@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Them</title>
+  <link rel="icon" type="../image/png" href="../img/favicon.png">
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    @font-face {
+      font-family: 'LDRFont';
+      src: url('../fonts/LDRFnt.ttf') format('truetype');
+    }
+
+    body {
+      background-color: black;
+      color: white;
+      font-family: 'LDRFont', monospace;
+      margin: 0;
+      overflow-x: hidden;
+    }
+
+    .top-bar {
+      background-color: black;
+      height: 60px;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      padding-left: 20px;
+      position: sticky;
+      top: 0;
+      z-index: 999;
+      border-bottom: 1px solid white;
+    }
+
+    .top-bar-icon {
+      height: 40px;
+      image-rendering: pixelated;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+
+    .top-bar-icon:hover {
+      transform: scale(1.1);
+    }
+
+    .content-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding-top: 40px;
+    }
+
+    .them-img {
+      max-width: 90%;
+      image-rendering: pixelated;
+    }
+
+    .circle-container {
+      position: relative;
+      width: 500px;
+      height: 500px;
+      margin: 100px auto;
+    }
+
+    .circle-item {
+      position: absolute;
+      width: 150px;
+      height: 150px;
+      top: 50%;
+      left: 50%;
+      transform-origin: center center;
+      cursor: pointer;
+      image-rendering: pixelated;
+      transition: transform 0.3s ease;
+    }
+
+    .circle-item:hover {
+      transform: scale(1.2) var(--base-transform);
+      z-index: 10;
+    }
+
+    .window {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      background-color: #000;
+      border: 2px solid white;
+      display: none;
+      z-index: 1000;
+      flex-direction: column;
+      transform: translate(-50%, -50%);
+      padding: 0;
+      margin: 0;
+      width: auto;
+      height: auto;
+    }
+
+    .window-header {
+      background-color: #000;
+      font-size: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid white;
+      height: 22px;
+      line-height: 22px;
+      padding: 0 6px;
+      box-sizing: border-box;
+      width: 100%;
+    }
+
+    .window-close {
+      cursor: pointer;
+      color: red;
+      font-weight: bold;
+    }
+
+    .window-content {
+      display: inline-block;
+      padding: 0;
+      margin: 0;
+      line-height: 0;
+      box-sizing: border-box;
+      background-color: #111;
+    }
+
+    .window-content img {
+      image-rendering: pixelated;
+      display: block;
+      margin: 0;
+      padding: 0;
+      max-width: none;
+      max-height: none;
+      border: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="top-bar">
+    <a href="index.html">
+      <img src="../img/1.png" alt="Go to Them" class="top-bar-icon">
+    </a>
+  </div>
+
+    <div class="circle-container" id="circle">
+      <img src="../img/them/h2.png" class="circle-item" data-target="2">
+      <img src="../img/them/h5.png" class="circle-item" data-target="5">
+      <img src="../img/them/h4.png" class="circle-item" data-target="4">
+      <img src="../img/them/h3.png" class="circle-item" data-target="3">
+      <img src="../img/them/h1.png" class="circle-item" data-target="1">
+    </div>
+  </div>
+
+<div class="window" id="window">
+  <div class="window-header" id="window-header">
+    <span id="window-title">Info</span>
+    <span class="window-close" id="close-window">X</span>
+  </div>
+  <div class="window-content">
+    <img id="window-image" src="" alt="">
+  </div>
+</div>
+
+<script>
+  const circle = document.getElementById('circle');
+  const items = document.querySelectorAll('.circle-item');
+  const radius = 180;
+  const total = items.length;
+
+  items.forEach((item, i) => {
+    const angle = (i / total) * (2 * Math.PI);
+    const x = Math.cos(angle) * radius;
+    const y = Math.sin(angle) * radius;
+    item.style.transform = `translate(-50%, -50%) translate(${x}px, ${y}px)`;
+    item.style.setProperty('--base-transform', `translate(-50%, -50%) translate(${x}px, ${y}px)`);
+  });
+
+  //AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA-
+  const windowBox = document.getElementById('window');
+  const windowImg = document.getElementById('window-image');
+  const closeBtn = document.getElementById('close-window');
+  const header = document.getElementById('window-header');
+
+  items.forEach(item => {
+    item.addEventListener('click', () => {
+      const id = item.getAttribute('data-target');
+      windowImg.src = `img/them/o${id}.gif`;
+      windowImg.onload = () => {
+        windowBox.style.width = (windowImg.naturalWidth + 4) + 'px'; // +4 for borders
+        windowBox.style.height = 'auto';
+        windowBox.style.display = 'flex';
+        // Center the window
+        windowBox.style.top = '50%';
+        windowBox.style.left = '50%';
+        windowBox.style.transform = 'translate(-50%, -50%)';
+      };
+    });
+  });
+
+  closeBtn.addEventListener('click', () => {
+    windowBox.style.display = 'none';
+    windowImg.src = '';
+  });
+
+  let isDragging = false;
+  let offsetX = 0;
+  let offsetY = 0;
+
+  header.addEventListener('mousedown', (e) => {
+    isDragging = true;
+    const rect = windowBox.getBoundingClientRect();
+    offsetX = e.clientX - rect.left;
+    offsetY = e.clientY - rect.top;
+    windowBox.style.transform = 'none';
+  });
+
+  document.addEventListener('mousemove', (e) => {
+    if (isDragging) {
+      windowBox.style.left = e.clientX - offsetX + 'px';
+      windowBox.style.top = e.clientY - offsetY + 'px';
+    }
+  });
+
+  document.addEventListener('mouseup', () => {
+    isDragging = false;
+  });
+</script>

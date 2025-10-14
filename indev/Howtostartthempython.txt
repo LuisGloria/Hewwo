@@ -1,2 +1,0 @@
-source ~/mpv-keyrec/venv/bin/activate
-python /home/lsys/Scripts/website/indev/ChartGen.py

@@ -3,104 +3,271 @@
 <head>
   <meta charset="UTF-8">
   <title>Songs</title>
-  <link rel="icon" type="../image/png" href="../img/favicon.png">
-  <link rel="stylesheet" href="../styles.css">
-
+  <link rel="icon" type="image/png" href="../img/favicon.png">
   <style>
     @font-face {
       font-family: 'LDRFont';
       src: url('../fonts/LDRFnt.ttf') format('truetype');
     }
 
-    body {
-      background-color: black;
-      color: white;
-      font-family: 'LDRFont', monospace;
+    html, body {
       margin: 0;
       padding: 0;
+      width: 100%;
+      height: 100%;
+      font-family: 'LDRFont', monospace;
+      background: url('../img/tv_noise.png') center/cover no-repeat;
+      image-rendering: pixelated;
+      overflow: hidden;
+      transition: background 0.5s ease;
+      position: relative;
     }
 
-    .top-bar {
-      background-color: black;
-      height: 60px;
+    @keyframes flicker {
+      0%, 19%, 21%, 50%, 55%, 100% {
+        opacity: 0.7;
+      }
+      20%, 54% {
+        opacity: 0.15;
+      }
+    }
+
+    @keyframes crt-bump {
+      0%   { transform: translate(0, 0); }
+      10%  { transform: translate(0px, -2px); }
+      20%  { transform: translate(0px,  1px); }
+      30%  { transform: translate(0px, -1px); }
+      40%  { transform: translate(0px,  2px); }
+      50%  { transform: translate(0px, -1px); }
+      60%  { transform: translate(0px,  1px); }
+      70%  { transform: translate(0px, -2px); }
+      80%  { transform: translate(0px,  1px); }
+      90%  { transform: translate(0px, -1px); }
+      100% { transform: translate(0, 0); }
+    }
+
+    /* Class to trigger bump */
+    .crt-bump {
+      animation: crt-bump 0.15s linear;
+    }
+
+    html {
       width: 100%;
+      height: 100%;
+      background-color: black; /* fallback default */
+    }
+
+    body::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      background: radial-gradient(circle at center, rgba(0,0,0,0) 60%, rgba(0,0,0,0.6) 100%);
+      z-index: 1;
+      animation: flicker 0.25s infinite alternate;
+    }
+
+      body::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 1;
+
+        background-image:
+          repeating-linear-gradient(
+            to bottom,
+            rgba(0,0,0,0.1) 0,
+            rgba(0,0,0,0.1) 1px,
+            rgba(0,0,0,0) 1px,
+            rgba(0,0,0,0) 3px
+          ),
+          url('../img/mask.png');
+
+        background-repeat: repeat, repeat;
+        background-size: auto, 15px 15px;
+        image-rendering: pixelated;
+
+        background-blend-mode: overlay, overlay;
+        opacity: 0.25;
+      }
+
+
+    .crt-mask {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+
+      /* layers for R, G, B */
+      background-image:
+        url('../img/mask.png'),
+        url('../img/mask.png'),
+        url('../img/mask.png');
+
+      background-repeat: repeat, repeat, repeat;
+      background-size: 15px 15px, 15px 15px, 15px 15px;
+      image-rendering: pixelated;
+
+      /* Color filters for each channel */
+      background-blend-mode: screen, screen, screen;
+      filter: brightness(1) contrast(1);
+    }
+
+
+    .left-bar-container {
+      position: absolute;
+      left: 20px;
+      bottom: 115px; /* AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA */
+      display: flex;
+      flex-direction: row;
+      align-items: row;
+      gap: 10px;
+      z-index: 2;
+    }
+
+    .button-row {
+      display: flex;
+      flex-direction: row;
+      gap: 10px;
+      flex-wrap: nowrap;
+    }
+
+
+    .left-bar {
+      z-index: 2;
+      margin-top: 555px;
+      width: 300px;
+      height: 50px;
+      background: url('../img/bar.png') no-repeat center/contain;
+      image-rendering: pixelated;
       display: flex;
       align-items: center;
-      padding-left: 20px;
-      position: sticky;
-      top: 0;
-      z-index: 999;
-      border-bottom: 1px solid white;
+      justify-content: center;
+      position: relative;
     }
 
-    .top-bar-icon {
-      height: 40px;
-      image-rendering: pixelated;
+    .bar-text {
+      color: white;
+      font-size: 18px;
+      pointer-events: none;
+      z-index: 3;
+    }
+
+    .button {
       cursor: pointer;
+      image-rendering: pixelated;
       transition: transform 0.2s ease;
-      margin-right: 10px;
+      height: 50px;
     }
 
-    .top-bar-icon:hover {
+    .button:hover {
       transform: scale(1.1);
     }
 
-    .cassette-container {
-      position: absolute;
-      display: inline-block;
-      margin-top: 150px;
-      margin-left: -100px;
-      width: auto;
-    }
-
-    .cassette-container img.cassette {
-      display: block;
-      width: 100%;
-      height: auto;
-    }
-
-    .play-button {
-      position: absolute;
-      top: -50px;
-      left: -250px;
-      cursor: pointer;
-      transition: transform 0.3s ease;
-      width: auto;
-    }
-
-    .play-button:hover {
-      transform: translateX(10px);
-    }
-
+    /* Bottom text; bottom text */
     .bottom-text {
-      position: fixed;
+      position: absolute;
       bottom: 0;
       width: 100%;
       text-align: center;
       background-color: black;
+      color: white;
       padding: 10px 0;
       font-size: 14px;
       border-top: 1px solid white;
+      z-index: 2;
     }
   </style>
 </head>
 <body>
 
-  <div class="top-bar">
-    <a href="../index.html">
-      <img src="../img/1.png" alt="Go to Them" class="top-bar-icon">
-    </a>
-  </div>
+  <div class="left-bar-container">
+    <div class="button-row">
+      <a href="../indev/list.html">
+        <img src="../img/button_play.png" alt="Play Button" class="button" id="button_play">
+      </a>
 
-  <div class="cassette-container">
-    <img src="../img/Cassette.png" alt="Cassette" class="cassette" />
-    <a href="../indev/list.html">
-      <img src="../img/PlayButton.png" alt="Play Button" class="play-button" />
-    </a>
+      <!-- <a href="../indev/options.html"> -->
+        <img src="../img/button_opt.png" alt="Options Button" class="button" id="button_opt">
+      </a>
+    </div>
+
+      <a href="../index.html">
+        <img src="../img/button_index.png" alt="Index Button" class="button" id="button_index">
+      </a>
+    </div>
+
+    <div class="left-bar">
+      <span class="bar-text" id="barText">Hover a button</span>
+    </div>
   </div>
 
   <div class="bottom-text">
-    BETA VERSION | RECOMENDED RESOLUTION: 1366X768 | RECOMENDED BROWSER: FIREFOX | WILL BE SCRAPPED FOR SOMETHING ELSE
+    BETA VERSION | RECOMMENDED RESOLUTION: 1366x768 | RECOMMENDED BROWSER: FIREFOX | STUFF WILL GET CHANGED LATER
   </div>
+
+  <script>
+    const barText = document.getElementById('barText');
+    const body = document.body;
+
+    const buttonPlay = document.getElementById('button_play');
+    const buttonIndex = document.getElementById('button_index');
+    const buttonOpt = document.getElementById('button_opt');
+
+    function setBackground(img, color) {
+      body.style.backgroundImage = `url('${img}'), radial-gradient(circle at center, rgba(0,0,0,0.2) 60%, rgba(0,0,0,0.5) 100%)`;
+      body.style.backgroundBlendMode = 'overlay';
+      document.documentElement.style.backgroundColor = color; // set html bg color
+    }
+
+    function triggerBump() {
+      body.classList.add('crt-bump');
+      setTimeout(() => {
+        body.classList.remove('crt-bump');
+      }, 150);
+    }
+
+    buttonPlay.addEventListener('mouseenter', () => {
+      barText.textContent = 'Insert Tape';
+      setBackground('../img/bg_vcr.gif', 'blue'); // pure blue
+      triggerBump();
+    });
+
+    buttonIndex.addEventListener('mouseenter', () => {
+      barText.textContent = 'Leave';
+      setBackground('../img/bg_back.gif', 'rgb(155,173,183)'); // R:155 G:173 B:183
+      triggerBump();
+    });
+
+    buttonPlay.addEventListener('mouseleave', () => {
+      barText.textContent = 'Select an option';
+      setBackground('../img/tv_noise.gif', 'black');
+    });
+
+    buttonIndex.addEventListener('mouseleave', () => {
+      barText.textContent = 'Select an option';
+      setBackground('../img/tv_noise.gif', 'black');
+    });
+
+    buttonOpt.addEventListener('mouseenter', () => {
+      barText.textContent = 'Service Menu';
+      setBackground('../img/bg_opt.png', 'black');
+      triggerBump();
+    });
+
+    buttonOpt.addEventListener('mouseleave', () => {
+      barText.textContent = 'Select an option';
+      setBackground('../img/tv_noise.gif', 'black');
+    });
+  </script>
+
 </body>
 </html>

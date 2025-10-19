@@ -2,79 +2,298 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Art</title>
-  <link rel="icon" type="../image/png" href="../img/favicon.png">
+  <title>Art Explorer</title>
+  <link rel="icon" type="image/png" href="../img/favicon.png">
   <link rel="stylesheet" href="../styles.css">
+
   <style>
     @font-face {
       font-family: 'LDRFont';
       src: url('../fonts/LDRFnt.ttf') format('truetype');
     }
+
+    body {
+      background-color: black;
+      color: white;
+      font-family: 'LDRFont', monospace;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .top-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 32px;
+      background: #000
+      border-bottom: 1px solid white;
+      display: flex;
+      align-items: center;
+      padding-left: 8px;
+      z-index: 10;
+    }
+
+    .top-bar-icon {
+      height: 28px;
+    }
+
+    .left-window {
+      flex: 1;
+      background-color: #000;
+      border-right: 2px solid white;
+      display: flex;
+      flex-direction: column;
+      margin-top: 32px;
+    }
+
+    .right-panel {
+      width: 300px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin-top: 32px;
+      position: relative;
+    }
+
+    .character {
+      image-rendering: pixelated;
+    }
+
+    .textbox {
+      margin-top: 10px;
+      background-color: #111;
+      border: 1px solid white;
+      padding: 6px;
+      width: 90%;
+      height: 80px;
+      font-size: 12px;
+      overflow-y: auto;
+      white-space: pre-line;
+    }
+
+    .window {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .window-header {
+      background-color: #111;
+      font-size: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid white;
+      padding: 4px 6px;
+    }
+
+    .window-content {
+      flex: 1;
+      padding: 10px;
+      overflow-y: auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-content: flex-start;
+    }
+
+    .item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100px;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .item img {
+      width: 100px;
+      height: 100px;
+      image-rendering: pixelated;
+    }
+
+    .item span {
+      font-size: 10px;
+      margin-top: 4px;
+    }
+
+    .viewer {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0,0,0,0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+      flex-direction: column;
+      visibility: hidden;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+
+    .viewer.active {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    .viewer img {
+      image-rendering: pixelated;
+      max-width: 90%;
+      max-height: 80vh;
+      cursor: zoom-in;
+      transition: transform 0.2s ease;
+    }
+
+    .viewer img.zoomed {
+      transform: scale(2);
+      cursor: zoom-out;
+    }
+
+    .close-btn {
+      margin-top: 10px;
+      border: 1px solid white;
+      background: #111;
+      padding: 4px 8px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+    .close-btn:hover {
+      background: #222;
+    }
   </style>
+</head>
+<body>
+  <div class="top-bar">
+    <a href="../index.html"><img src="../img/1.png" alt="Go to Them" class="top-bar-icon"></a>
+  </div>
 
-<div class="top-bar">
-    <a href="../index.html">
-    <img src="../img/1.png" alt="Go to Them" class="top-bar-icon">
-  </a>
-</div>
+  <div class="left-window">
+    <div class="window">
+      <div class="window-header">Art Explorer</div>
+      <div class="window-content" id="windowContent"></div>
+    </div>
+  </div>
 
-<div id="gallery"></div>
+  <!-- Right side character + text -->
+  <div class="right-panel">
+    <img src="../img/FXdef.png" alt="FX" id="character" class="character">
+    <div class="textbox" id="textbox">Select a folder.</div>
+  </div>
 
-<script>
-  // List all images here
-  const images = [
-    '../art/art1.png', // Little art I did for Kamex on his bday.
-    '../art/art2.png', // |_ Something about him being possessed by the sin of envy just makes my brain go: "m o r e".
-    '../art/art3.png', // I did this for Rhydian when he said he couldn't read as a joke, people then did thier own OC's here, I like this.
-    '../art/art4.png', // These were the old versions of the bat.png banners, look at how much my son has grown!
-    '../art/art5.png', // These were the old versions of the bat.png banners, look at how much my son has grown! x2
-    '../art/art6.png', // Concept for a game, never ended up working on it lmao
-    '../art/art7.png', // C flat!
-    '../art/art8.png', // Concept for a watch on a game for Singet.
-    '../art/art9.png', // My old pfp
-    '../art/art10.png',// LOADER.DMG has stopped working!
-    '../art/art11',    // wHY aRe YOu HeRE?? ?
-    '../art/art12',    // LOADER had enough for that day...
-    '../art/art13',    // TIHI
-    '../art/art14',    // STOP PACKAGING UR SOFTWARE!!!!!1!!!1!1!
-    '../art/art15',    // Papers please- Nope! ID please!
-    '../art/art16',    // Just breathe Zilo...you'll be fine.
-    '../art/art17.png',// FNF: FAILSAFE concept
-    '../art/art18.png',// old IATC logo
-    '../art/art19.png',// Another game concept
-    '../art/art20.png',// Mainframes!
-    '../art/art21.png',// Le ost for that concept v1
-    '../art/art22.png',// Le ost for that concept v2
-    '../art/art23.png' // Broken floppy disk
-  ];
+  <div class="viewer" id="viewer">
+    <img id="viewerImage" src="">
+    <div class="close-btn" id="closeViewer">Close</div>
+  </div>
 
-  const gallery = document.getElementById('gallery');
+  <script>
+    const character = document.getElementById('character');
+    const textbox = document.getElementById('textbox');
+    const windowContent = document.getElementById('windowContent');
+    const viewer = document.getElementById('viewer');
+    const viewerImage = document.getElementById('viewerImage');
+    const closeViewer = document.getElementById('closeViewer');
 
-  images.forEach(src => {
-    const img = document.createElement('img');
-    img.src = src;
-    img.style.display = 'block'; // stacks images vertically
-    img.style.marginBottom = '10px'; // optional spacing
-    gallery.appendChild(img);
-  });
-</script>
+    // confusing folder structure
+    const folders = {
+      "Concepts": [
+        { src: "../art/art6.png", desc: "Concept for a game, never ended up working on it lmao" },
+        { src: "../art/art7.png", desc: "C flat!" },
+        { src: "../art/art8.png", desc: "Concept for a watch on a game for Singet." },
+        { src: "../art/art11", desc: "wHY aRe YOu HeRE?? ?" },
+        { src: "../art/art19.png", desc: "Another game concept" },
+        { src: "../art/art17.png", desc: "FNF: FAILSAFE concept" },
+        { src: "../art/art21.png", desc: "Le ost for that concept v1" },
+        { src: "../art/art22.png", desc: "Le ost for that concept v2" },
+        { src: "../art/art23.png", desc: "Broken floppy disk" }
+      ],
+      "Banners": [
+        { src: "../art/art4.png", desc: "These were the old versions of the bat.png banners, look at how much my son has grown!" },
+        { src: "../art/art5.png", desc: "These were the old versions of the bat.png banners, look at how much my son has grown! x2" },
+        { src: "../art/art9.png", desc: "My old pfp" }
+      ],
+      "Art_I_guess": [
+        { src: "../art/art1.png", desc: "Little art I did for Kamex on his bday" },
+        { src: "../art/art2.png", desc: "Something about him being possessed by the sin of envy just makes my brain go: m o r e." },
+        { src: "../art/art3.png", desc: "I did this for Rhydian when he said he couldn't read as a joke, people then did thier own OC's here." },
+        { src: "../art/art13", desc: "TIHI" },
+        { src: "../art/art14", desc: "STOP PACKAGING UR SOFTWARE!!!!!1!!!1!1!" },
+        { src: "../art/art15", desc: "Papers please- Nope! ID please!" },
+        { src: "../art/art16", desc: "Just breathe Zilo...you'll be fine." },
+        { src: "../art/art18.png", desc: "old IATC logo" }
+      ],
+      "ayyyy lmao": [
+        { src: "../art/art10.png", desc: "LOADER.DMG has stopped working!" },
+        { src: "../art/art12", desc: "LOADER had enough for that day..." }
+      ]
+    };
 
-<style>
-  body {
-    background-color: black;
-    color: white;
-    font-family: monospace;
-    margin: 0;
-    padding: 0;
-  }
+    let currentFolder = null;
 
-  #gallery {
-    padding: 10px;
-  }
+    function showFolders() {
+      windowContent.innerHTML = "";
+      for (const folderName in folders) {
+        const div = document.createElement("div");
+        div.className = "item";
+        div.innerHTML = `
+          <img src="../img/folder.png" alt="${folderName}">
+          <span>${folderName}</span>
+        `;
+        div.onclick = () => openFolder(folderName);
+        windowContent.appendChild(div);
+      }
+      textbox.textContent = "Select a folder.";
+      character.src = "../img/FXdef.png";
+    }
 
-  #gallery img {
-    max-width: 100%;      /* optional: prevents overflow */
-    display: block;
-    margin: 0 auto 10px;
-  }
-</style>
+    function openFolder(name) {
+      currentFolder = name;
+      windowContent.innerHTML = "";
+      const back = document.createElement("div");
+      back.className = "item";
+      back.innerHTML = `<img src="../img/folder.png"><span>⬅ Back</span>`;
+      back.onclick = showFolders;
+      windowContent.appendChild(back);
+
+      folders[name].forEach(art => {
+        const div = document.createElement("div");
+        div.className = "item";
+        div.innerHTML = `<img src="${art.src}" alt=""><span>Artwork</span>`;
+        div.onclick = () => showArtwork(art);
+        windowContent.appendChild(div);
+      });
+      textbox.textContent = `Browsing "${name}" folder.`;
+    }
+
+    function showArtwork(art) {
+
+      viewer.classList.add("active");
+      viewerImage.src = art.src;
+      viewerImage.classList.remove("zoomed");
+      textbox.textContent = art.desc;
+      character.src = "../img/FXtalking.gif";
+    }
+
+    // Zoom
+    viewerImage.addEventListener("click", () => {
+      viewerImage.classList.toggle("zoomed");
+    });
+
+    closeViewer.addEventListener("click", () => {
+      viewer.classList.remove("active");
+      character.src = "../img/FXdef.png";
+      textbox.textContent = `Browsing "${currentFolder}" folder.`;
+    });
+
+    // Initialize
+    showFolders();
+  </script>
+</body>
+</html>

@@ -39,6 +39,7 @@
       width: 200px;
       cursor: pointer;
       image-rendering: pixelated;
+      z-index: 2;
     }
 
     .ipod:hover {
@@ -51,14 +52,122 @@
       font-family: 'LDRFont', monospace;
     }
 
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.9);
+      color: white;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 50px;
+      z-index: 3;
+    }
 
+    .overlay h2 {
+      font-family: 'LDRFont', monospace;
+      margin-bottom: 20px;
+      font-size: 24px;
+    }
+
+    .song-list {
+      width: 90%;
+      max-width: 800px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding-bottom: 30px;
+      margin: 0 auto;
+    }
+
+    .song-item {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 20px;
+      padding: 10px 30px;   /* some horizontal padding so the album don't hide lmao */
+      border-bottom: 1px solid #333;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      opacity: 0.8;
+      background: transparent;
+    }
+
+    .song-item img {
+      width: 100px;
+      height: 100px;
+      image-rendering: pixelated;
+      transition: all 0.25s ease;
+    }
+
+    .song-info {
+      display: flex;
+      flex-direction: column;
+      font-family: 'LDRFont', monospace;
+      transition: all 0.25s ease;
+    }
+
+    .song-info .title {
+      font-size: 18px;
+    }
+
+    .song-info .artist {
+      font-size: 14px;
+      color: #ccc;
+    }
+
+    /* Expand your mind Omori! */
+    .song-item.active {
+      transform: scale(1.05);
+      opacity: 1;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .song-item.active img {
+      width: 150px;
+      height: 150px;
+    }
+
+    .song-item.active .song-info .title {
+      font-size: 22px;
+    }
+
+    .song-item.active .song-info .artist {
+      font-size: 16px;
+      color: #fff;
+    }
+
+    .close-overlay {
+      margin-top: 20px;
+      cursor: pointer;
+      font-size: 18px;
+      color: #bbb;
+      transition: color 0.2s;
+      font-family: 'LDRFont', monospace;
+    }
+
+    .close-overlay:hover {
+      color: white;
+    }
+
+    .song-list::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .song-list::-webkit-scrollbar-thumb {
+      background: #555;
+    }
+
+    .song-list::-webkit-scrollbar-track {
+      background: #111;
+    }
   </style>
 </head>
 <body>
-  <!--- I really do want to see if I can find an iPod Classic on e-waste, only time will tell --->
   <img src="../img/ZiloVibin.gif" alt="Zilo Vibin" id="ziloVibin" class="zilo">
   <img src="../img/ZiloLookin.png" alt="Zilo Lookin" id="ziloLookin" class="zilo" style="display: none;">
-  <img src="../img/IPodClassic.png" alt="iPod Classic" id="ipod" class="ipod">
+  <img src="../img/IPodClassic.gif" alt="iPod Classic" id="ipod" class="ipod">
 
   <div class="top-bar">
     <a href="../index.html">
@@ -67,8 +176,14 @@
   </div>
 
   <div class="song-title" id="songTitle">Scroll to pick a song</div>
-
   <audio id="audioPlayer" src=""></audio>
+
+  <!-- Overlay for song selection -->
+  <div class="overlay" id="overlay">
+    <h2>Select a song</h2>
+    <div class="song-list" id="songList"></div>
+    <div class="close-overlay" id="closeOverlay">Cancel</div>
+  </div>
 
   <script>
     const ipod = document.getElementById("ipod");
@@ -76,16 +191,31 @@
     const ziloLookin = document.getElementById("ziloLookin");
     const audioPlayer = document.getElementById("audioPlayer");
     const songTitle = document.getElementById("songTitle");
+    const overlay = document.getElementById("overlay");
+    const songList = document.getElementById("songList");
+    const closeOverlay = document.getElementById("closeOverlay");
 
     const songs = [
-      { name: "ROBOCOP III - Alien", file: "/Hewwo/audio/robocop3.mp3" },
-      { name: "RollerDisco Rumble - Vince Kaichan", file: "/Hewwo/audio/song2.mp3" }
+      {
+        title: "ROBOCOP III",
+        artist: "Alien",
+        file: "../audio/robocop3.mp3",
+        cover: "../img/albums/robocop3.png"
+      },
+      {
+        title: "RollerDisco Rumble",
+        artist: "Vince Kaichan",
+        file: "../audio/song2.mp3",
+        cover: "../img/albums/rollerdisco.png"
+      }
+      // will add more songs, maybe.
     ];
 
     let currentIndex = 0;
 
     function updateSongTitle() {
-      songTitle.textContent = songs[currentIndex].name;
+      const s = songs[currentIndex];
+      songTitle.textContent = `${s.title} - ${s.artist}`;
     }
 
     function playCurrentSong() {
@@ -93,34 +223,43 @@
       audioPlayer.play();
     }
 
-    updateSongTitle();
+    function showOverlay() {
+      overlay.style.display = "flex";
+    }
 
-    // Mouse wheel scrolling
-    // I HATE JS SO F'ING MUCH
-    ipod.addEventListener("wheel", (e) => {
-      e.preventDefault();
-      if (e.deltaY > 0) {
-        currentIndex = (currentIndex + 1) % songs.length;
-      } else {
-        currentIndex = (currentIndex - 1 + songs.length) % songs.length;
-      }
-      updateSongTitle();
+    function hideOverlay() {
+      overlay.style.display = "none";
+    }
 
-      // Re-show vibin Zilo if music is playing and iPod is not hovered
-      // This should fix it, I hope
-      if (!ipod.matches(":hover") && !audioPlayer.paused) {
-        ziloVibin.style.display = "block";
-        ziloLookin.style.display = "none";
-      }
+    songs.forEach((song, index) => {
+      const item = document.createElement("div");
+      item.className = "song-item";
+      item.innerHTML = `
+        <img src="${song.cover}" alt="${song.title}">
+        <div class="song-info">
+          <div class="title">${song.title}</div>
+          <div class="artist">${song.artist}</div>
+        </div>
+      `;
+
+      item.addEventListener("mouseenter", () => {
+        document.querySelectorAll(".song-item").forEach(i => i.classList.remove("active"));
+        item.classList.add("active");
+      });
+
+      item.addEventListener("click", () => {
+        currentIndex = index;
+        updateSongTitle();
+        playCurrentSong();
+        hideOverlay();
+      });
+
+      songList.appendChild(item);
     });
 
+    ipod.addEventListener("click", showOverlay);
+    closeOverlay.addEventListener("click", hideOverlay);
 
-    // Play on click
-    ipod.addEventListener("click", () => {
-      playCurrentSong();
-    });
-
-    // Show/hide Zilo reactions
     ipod.addEventListener("mouseenter", () => {
       ziloVibin.style.display = "none";
       ziloLookin.style.display = "block";
@@ -143,7 +282,8 @@
     audioPlayer.addEventListener("pause", () => {
       ziloVibin.style.display = "none";
     });
-  </script>
 
+    updateSongTitle();
+  </script>
 </body>
 </html>

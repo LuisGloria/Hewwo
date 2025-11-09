@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>About Me</title>
+    <link rel="icon" type="../image/png" href="../img/favicon.png" />
+    <link rel="stylesheet" href="../styles.css" />
+    <style>
+      @font-face {
+        font-family: "LDRFont";
+        src: url("../fonts/LDRFnt.ttf") format("truetype");
+      }
+
+      body {
+        background-color: black;
+        color: white;
+        font-family: "LDRFont", monospace;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+      }
+
+      .top-bar {
+        background-color: black;
+        height: 60px;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        padding-left: 20px;
+        position: fixed;
+        top: 0;
+        z-index: 999;
+        border-bottom: 1px solid white;
+      }
+
+      .top-bar-icon {
+        height: 40px;
+        image-rendering: pixelated;
+        cursor: pointer;
+        transition: transform 0.2s ease;
+        margin-right: 10px;
+      }
+
+      .top-bar-icon:hover {
+        transform: scale(1.1);
+      }
+
+      .login-box {
+        text-align: center;
+        border: 1px solid white;
+        padding: 40px;
+        border-radius: 6px;
+        width: 300px;
+        margin-top: 80px;
+      }
+
+      .login-box h2 {
+        margin-bottom: 30px;
+        font-size: 1.5em;
+        letter-spacing: 1px;
+      }
+
+      .login-box input[type="text"],
+      .login-box input[type="password"] {
+        width: 100%;
+        background: transparent;
+        border: 1px solid white;
+        color: white;
+        /* padding: 10px; */
+        margin-bottom: 20px;
+        outline: none;
+        font-family: inherit;
+        font-size: 1em;
+        text-align: center;
+      }
+
+      .login-box input::placeholder {
+        color: #ccc;
+      }
+
+      .login-box button {
+        width: 100%;
+        background: transparent;
+        border: 1px solid white;
+        color: white;
+        /* padding: 10px; */
+        margin-bottom: 20px;
+        outline: none;
+        font-family: inherit;
+        font-size: 1em;
+        text-align: center;
+        transition: background 0.2s ease, color 0.2s ease;
+      }
+
+      .login-box button:hover {
+        background: white;
+        color: black;
+      }
+
+      #message {
+        margin-top: 10px;
+        color: #ff5555;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="top-bar">
+      <a href="../index.html">
+        <img src="../img/1.png" alt="Go to Them" class="top-bar-icon" />
+      </a>
+    </div>
+
+    <div class="login-box">
+      <h2>Admin Login</h2>
+      <form id="loginForm">
+        <input type="text" id="username" placeholder="Username" required />
+        <input type="password" id="password" placeholder="Password" required />
+        <button type="submit">Log In</button>
+      </form>
+      <p id="message"></p>
+    </div>
+
+    <script src="login.js"></script>
+  </body>
+</html>

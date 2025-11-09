@@ -1,79 +1,249 @@
-<!DOCTYPE html>
-<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Track List</title>
-  <link rel="icon" type="../image/png" href="../img/favicon.png">
-  <link rel="stylesheet" href="../styles.css">
-
-  <style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>List</title>
+<link rel="icon" type="../image/png" href="../img/favicon.png">
+<link rel="stylesheet" href="../styles.css">
+<style>
     @font-face {
-      font-family: 'LDRFont';
+      font-family: 'LDRFnt';
       src: url('../fonts/LDRFnt.ttf') format('truetype');
     }
 
-    body {
-      background-color: black;
-      color: white;
-      font-family: 'LDRFont', monospace;
-      margin: 0;
-      padding: 40px 0;
-      text-align: center;
-    }
+  body {
+    background-color: black;
+    color: white;
+    font-family: 'LDRFnt', monospace;
+    margin: 0;
+    padding: 0;
+    overflow-y: auto;
+  }
 
-    .top-bar {
-      background-color: black;
-      height: 60px;
-      width: 100%;
+  .top-bar {
+    background-color: black;
+    padding: 4px;
+    border-bottom: 1px solid white;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+
+  .top-bar img {
+    height: 32px;
+    cursor: pointer;
+  }
+
+  .row-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+  }
+
+  .row {
       display: flex;
-      align-items: center;
-      padding-left: 20px;
-      position: sticky;
-      top: 0;
-      z-index: 999;
-      border-bottom: 1px solid white;
-      margin-top: -40px;
-    }
+      gap: 10px;
+      overflow-x: auto;
+      align-items: flex-start;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+  }
 
-    .top-bar-icon {
-      height: 40px;
+  .row::-webkit-scrollbar {
+      display: none;
+  }
+
+  .row img {
       image-rendering: pixelated;
       cursor: pointer;
-      transition: transform 0.2s ease;
-      margin-right: 10px;
-    }
-
-    .track-img {
-      display: block;
-      margin: 20px auto;
-      image-rendering: pixelated;
-      max-width: 100%;
+      flex-shrink: 0;
       height: auto;
-      cursor: pointer;
-      transition: transform 0.2s ease;
-    }
+  }
 
-    .track-img:hover {
-      transform: scale(1.05);
-    }
+  .row::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+  }
 
-  </style>
+  @keyframes flicker {
+    0%, 19%, 21%, 50%, 55%, 100% {
+      opacity: 0.7;
+    }
+    20%, 54% {
+      opacity: 0.15;
+    }
+  }
+
+  @keyframes crt-bump {
+    0%   { transform: translate(0, 0); }
+    10%  { transform: translate(0px, -2px); }
+    20%  { transform: translate(0px,  1px); }
+    30%  { transform: translate(0px, -1px); }
+    40%  { transform: translate(0px,  2px); }
+    50%  { transform: translate(0px, -1px); }
+    60%  { transform: translate(0px,  1px); }
+    70%  { transform: translate(0px, -2px); }
+    80%  { transform: translate(0px,  1px); }
+    90%  { transform: translate(0px, -1px); }
+    100% { transform: translate(0, 0); }
+  }
+
+  .crt-bump {
+    animation: crt-bump 0.15s linear;
+  }
+
+  html {
+    width: 100%;
+    height: 100%;
+    background-color: black;
+  }
+
+
+  body::after {
+    content: '';
+    position: fixed; /* was absolute */
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    background: radial-gradient(circle at center, rgba(0,0,0,0) 60%, rgba(0,0,0,0.6) 100%);
+    z-index: 999; /* keep above content but below top-bar */
+    animation: flicker 0.25s infinite alternate;
+  }
+
+  body::before {
+    content: '';
+    position: fixed; /* was absolute */
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 998;
+    background-image:
+      repeating-linear-gradient(
+        to bottom,
+        rgba(0,0,0,0.1) 0,
+        rgba(0,0,0,0.1) 1px,
+        rgba(0,0,0,0) 1px,
+        rgba(0,0,0,0) 3px
+      ),
+      url('../img/mask.png');
+    background-repeat: repeat, repeat;
+    background-size: auto, 15px 15px;
+    image-rendering: pixelated;
+    background-blend-mode: overlay, overlay;
+    opacity: 0.25;
+  }
+
+  .crt-mask {
+    position: fixed; /* same here */
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1000;
+    background-image:
+      url('../img/mask.png'),
+      url('../img/mask.png'),
+      url('../img/mask.png');
+    background-repeat: repeat, repeat, repeat;
+    background-size: 15px 15px, 15px 15px, 15px 15px;
+    image-rendering: pixelated;
+    background-blend-mode: screen, screen, screen;
+    filter: brightness(1) contrast(1);
+  }
+</style>
 </head>
 <body>
+    <div class="top-bar">
+      <a href="../index.html">
+        <img src="../img/1.png" alt="Go to Them" class="top-bar-icon">
+      </a>
+    </div>
 
-  <div class="top-bar">
-    <a href="../index.html">
-      <img src="../img/1.png" alt="Back to Index" class="top-bar-icon">
-    </a>
-  </div>
+  <div class="row-container">
 
-  <a href="sng1.html">
-    <img src="assets/SNG1.png" alt="Song 1" class="track-img">
-  </a>
+    <!-- Row 0 -->
+  <div class="row">
+      <img src="assets2/stages/Tittle_Row0.png" alt="Title Row 0">
+      <a href="lev/levelX.html"><img src="assets2/stages/Stage0/Song1.png" alt="stage 0 sng 1"></a>
+      <a href="lev/levelX.html"><img src="assets2/stages/Stage0/Song2.png" alt="stage 0 sng 2"></a>
+      <a href="lev/levelX.html"><img src="assets2/stages/Stage0/Song3.png" alt="stage 0 sng 3"></a>
+    </div>
 
-  <a href="sng2.html">
-    <img src="assets/SNG2.png" alt="Song 2" class="track-img">
-  </a>
+  <div class="row">
+      <img src="assets2/stages/Tittle_Row3.png" alt="Title Row 0">
+      <a href="lev/levelX.html"><img src="assets2/stages/Stage3/Song1.png" alt="stage 3 sng 1"></a>
+    </div>
+
+  <div class="row">
+      <img src="assets2/stages/Tittle_Row4.png" alt="Title Row 0">
+      <a href="lev/levelX.html"><img src="assets2/stages/Stage4/Song1.png" alt="stage 4 sng 1"></a>
+      <a href="lev/levelX.html"><img src="assets2/stages/Stage4/Song2.png" alt="stage 4 sng 2"></a>
+    </div>
+
+  <div class="row">
+      <img src="assets2/stages/Tittle_Row5.png" alt="Title Row 0">
+      <a href="lev/levelX.html"><img src="assets2/stages/Stage5/Song1.png" alt="stage 5 sng 1"></a>
+      <a href="lev/levelX.html"><img src="assets2/stages/Stage5/Song2.png" alt="stage 5 sng 2"></a>
+      <a href="lev/levelX.html"><img src="assets2/stages/Stage5/Song3.png" alt="stage 5 sng 3"></a>
+    </div>
+
+  <div class="row">
+      <img src="assets2/stages/Tittle_Row6.png" alt="Title Row 0">
+      <a href="lev/levelX.html"><img src="assets2/stages/Stage6/Song1.png" alt="stage 6 sng 1"></a>
+      <a href="lev/levelX.html"><img src="assets2/stages/Stage6/Song2.png" alt="stage 6 sng 2"></a>
+      <a href="lev/levelX.html"><img src="assets2/stages/Stage6/Song3.png" alt="stage 6 sng 3"></a>
+    </div>
+
+  <div class="row">
+      <img src="assets2/stages/Tittle_Row2.png" alt="Title Row 2">
+      <a href="lev/levelX.html"><img src="assets2/stages/Stage2/Song1.png" alt="stage 2 sng 1"></a>
+    </div>
+
+    <h1>WARNING: BIO-HAZARD ZONE --- DO <span style="color: #ff4b4b; font-weight: bold;">NOT</span> LET ARS IN, HE'LL SIMP AGAIN!</h1>
+
+    <!-- Row 1 -->
+    <div class="row">
+      <img src="assets2/stages/ERR.gif" alt="Title Row 1">
+      <a href="lev/levelX.html"><img src="assets2/stages/Stage1/DEF.gif" alt="stage 1 sng 1"></a>
+    </div>
+    <!-- Why did I start with 0 you ask? idk, C++ arrays start with 0 so it's force of habit at this point lol -->
+    <!-- TODO: Add score below songs. -->
+    <p>Also, warning here, SIGNETICS, Zilog, MOS, and 3dfx logos are used for historical/fan purposes. Not affiliated with any of the companies and yadda yadda yadda, pls don't sue me.<br> F'k trademarks</p>
+</div>
+
+<audio id="bgm" src="mus/mus_mainmenu.mp3" loop></audio>
+
+<script>
+
+    const barText = document.getElementById('barText');
+    const body = document.body;
+
+    document.addEventListener('click', function playMusicOnce() {
+      const bgm = document.getElementById('bgm');
+      bgm.volume = 0.5;
+      bgm.play();
+      document.removeEventListener('click', playMusicOnce);
+    });
+
+    function triggerBump() {
+      body.classList.add('crt-bump');
+      setTimeout(() => {
+        body.classList.remove('crt-bump');
+      }, 150);
+    }
+
+  // Allow horizontal scrolling
+  document.querySelectorAll('.row').forEach(row => {
+    row.addEventListener('wheel', e => {
+      if (e.deltaY !== 0) {
+        e.preventDefault();
+        row.scrollLeft += e.deltaY;
+      }
+    });
+  });
+</script>
 
 </body>
 </html>

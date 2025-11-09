@@ -211,10 +211,13 @@
   </div>
 
   <div class="bottom-text">
-    BETA VERSION | RECOMMENDED RESOLUTION: 1366x768 | RECOMMENDED BROWSER: FIREFOX | STUFF WILL GET CHANGED LATER
+    BETA VERSION | RECOMMENDED RESOLUTION: 1366x768 | RECOMMENDED BROWSER: FIREFOX | STUFF WILL GET CHANGED LATER | <span style="color: #00ff00; font-weight: bold;">CLICK ANYWHERE FOR MUSIC</span>
   </div>
 
+  <audio id="bgm" src="../indev/mus/mus_mainmenu.mp3" loop></audio>
+
   <script>
+    const bgm = document.getElementById('bgm');
     const barText = document.getElementById('barText');
     const body = document.body;
 
@@ -267,6 +270,36 @@
       barText.textContent = 'Select an option';
       setBackground('../img/tv_noise.gif', 'black');
     });
+
+  document.addEventListener('click', function playMusicOnce() {
+    bgm.volume = 0.5;
+    bgm.play().catch(() => {});
+    document.removeEventListener('click', playMusicOnce);
+  });
+
+  // Smooth volume transition helper
+  function fadeVolume(target, speed = 0.02) {
+    const fade = setInterval(() => {
+      if (Math.abs(bgm.volume - target) < speed) {
+        bgm.volume = target;
+        clearInterval(fade);
+      } else if (bgm.volume < target) {
+        bgm.volume += speed;
+      } else {
+        bgm.volume -= speed;
+      }
+    }, 50);
+  }
+
+  // Pwease woowk...
+  buttonPlay.addEventListener('mouseenter', () => fadeVolume(0.5));
+  buttonOpt.addEventListener('mouseenter', () => fadeVolume(0.5));
+  buttonIndex.addEventListener('mouseenter', () => fadeVolume(0.1)); // muffled when on Leave
+
+  [buttonPlay, buttonOpt, buttonIndex].forEach(btn => {
+    btn.addEventListener('mouseleave', () => fadeVolume(0.5));
+  });
+
   </script>
 
 </body>

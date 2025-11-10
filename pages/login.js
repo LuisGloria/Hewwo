@@ -15,7 +15,7 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
   if (res.ok && data.token) {
     // Store JWT locally
     localStorage.setItem("jwt", data.token);
-    window.location.href = "dashboard/index.html";
+    window.location.href = "dashboard/dashboard.html";
   } else {
     document.getElementById("message").textContent = "Invalid credentials";
   }

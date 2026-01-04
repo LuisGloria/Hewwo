@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="robots" content="noai, noimageai, nosnippet">
+  <title>Computer</title>
+  <link rel="icon" type="../image/png" href="../img/favicon.png">
+  <link rel="stylesheet" href="../styles.css">
+
+  <style>
+    @font-face {
+      font-family: 'LDRFont';
+      src: url('../fonts/LDRFnt.ttf') format('truetype');
+    }
+
+    body {
+      margin: 0;
+      overflow: hidden;
+      background: black;
+      font-family: 'LDRFont', monospace;
+    }
+
+    /* ===== LAYERS ===== */
+
+    .color-layer {
+      position: fixed;
+      inset: 0;
+      background-color: black;
+      transition: background-color 1.5s ease;
+      z-index: 1;
+    }
+
+    .computer-layer {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2;
+      cursor: pointer;
+    }
+
+    .computer-layer img {
+      image-rendering: pixelated;
+      user-select: none;
+
+      /* No scaling */
+      width: auto;
+      height: auto;
+      max-width: none;
+      max-height: none;
+    }
+
+
+    /* Flash effect */
+    .flash {
+      background-color: white !important;
+      transition: none !important;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Color background -->
+  <div class="color-layer" id="colorLayer"></div>
+
+<!-- Computer -->
+<div class="computer-layer" id="computerLayer">
+  <img src="../img/computer.png" id="computerImg" alt="Computer">
+</div>
+
+<!-- Dialogue container -->
+<div id="dialogContainer" style="
+  position: fixed;
+  bottom: 20px;
+  left: 350px;
+  width: 600px;
+  max-height: 400px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 4px;
+  z-index: 3;
+  font-family: 'LDRFont', monospace;
+"></div>
+
+<!-- Audio -->
+<audio id="tapeInsert" src="../audio/Tapeinsert.m4a"></audio>
+<audio id="cassette" src="../audio/cassette.mp3"></audio>
+<audio id="tapeStop" src="../audio/Tapestop.mp3"></audio>
+<audio id="tapeResume" src="../audio/Taperesume.mp3"></audio>
+
+<script>
+const colorLayer = document.getElementById('colorLayer');
+const computerLayer = document.getElementById('computerLayer');
+const computerImg = document.getElementById('computerImg');
+const dialogContainer = document.getElementById('dialogContainer');
+
+let isOn = false;
+
+// Monitor dimensions
+const MONITOR_WIDTH = 800;
+const MONITOR_HEIGHT = 400;
+
+// Dialogue script
+const scriptLines = [
+  { text: "LOADER.DMG here...", time: 0.1 },
+  { text: "I managed to hack into the servers of the International Anomaly Termination Centre", time: 1.950 },
+  { text: "Some idiot left their desktop logged in while they were out", time: 6.12 },
+  { text: "I copied all non-redacted files into this old desktop I found in Zilo's basement", time: 10.159 },
+  { text: "If you're not me listening to this, there's not a lot I can do to stop you from", time: 15.3 },
+  { text: "looking at these files, so you might as well have a go at it.", time: 20.097 },
+  { text: "Whatever you do, just don't dig too deep.", time: 24.270 } // END
+];
+
+let displayedLines = [];
+
+// Audio elements
+const tapeInsert = document.getElementById('tapeInsert');
+const cassette = document.getElementById('cassette');
+const tapeStop = document.getElementById('tapeStop');
+const tapeResume = document.getElementById('tapeResume');
+
+// Cassette states
+let cassetteTouched = false;
+let cassettePlaying = false;
+let scriptSyncStarted = false;
+
+// --- Dialogue functions ---
+const MAX_LINES = 2; // max number of lines visible
+
+function addLine(text) {
+  const lineBox = document.createElement('div');
+  lineBox.textContent = text;
+  lineBox.style.background = 'rgba(0,0,0,0.7)';
+  lineBox.style.color = 'white';
+  lineBox.style.padding = '4px 6px';
+  lineBox.style.border = '1px solid white';
+  lineBox.style.fontSize = '14px';
+  lineBox.style.transition = 'all 0.5s ease';
+  lineBox.style.opacity = 0; // start invisible
+
+  // Append new line at the bottom
+  dialogContainer.appendChild(lineBox);
+
+  // Animate fade-in
+  requestAnimationFrame(() => {
+    lineBox.style.opacity = 1;
+  });
+
+  // Move existing lines up and fade
+  displayedLines.forEach((oldLine, i) => {
+    oldLine.style.transform = `translateY(24px)`; // push up by 24px
+    oldLine.style.opacity = 0.6; // fade older lines
+  });
+
+  // Add the new line to the array of displayed lines
+  displayedLines.push(lineBox);
+
+  // Remove oldest line if we exceed max
+  if (displayedLines.length > MAX_LINES) {
+    const oldLine = displayedLines.shift(); // remove the first (oldest)
+    oldLine.style.opacity = 0;
+    oldLine.style.transform = `translateY(24px)`; // move slightly up
+    setTimeout(() => {
+      oldLine.remove();
+    }, 500); // wait for transition
+  }
+}
+
+function startScriptSync(audioElement) {
+  if (scriptSyncStarted) return; // prevent multiple loops
+  scriptSyncStarted = true;
+  let nextLineIndex = 0;
+
+  function tick() {
+    if (nextLineIndex >= scriptLines.length) return;
+
+    const currentTime = audioElement.currentTime;
+    const line = scriptLines[nextLineIndex];
+
+    if (line.time !== null && currentTime >= line.time) {
+      addLine(line.text);
+      nextLineIndex++;
+    }
+
+    requestAnimationFrame(tick);
+  }
+
+  requestAnimationFrame(tick);
+}
+
+// --- Computer power functions ---
+function turnOn() {
+  isOn = true;
+  colorLayer.classList.add('flash');
+  setTimeout(() => {
+    colorLayer.classList.remove('flash');
+    colorLayer.style.backgroundColor = '#0000ff';
+  }, 100);
+}
+
+function turnOff() {
+  isOn = false;
+  colorLayer.style.backgroundColor = 'black';
+
+  // Stop cassette if playing
+  if (cassettePlaying) {
+    cassette.pause();
+    cassette.currentTime = 0;
+    cassettePlaying = false;
+  }
+}
+
+// --- Computer click handler ---
+computerLayer.addEventListener('click', (e) => {
+  const rect = computerImg.getBoundingClientRect();
+  const clickX = e.clientX - rect.left;
+  const clickY = e.clientY - rect.top;
+
+  // --- Cassette area ---
+  const cassetteLeft = 110;
+  const cassetteRight = 346;
+  const cassetteTop = 541;
+  const cassetteBottom = 650;
+
+  const clickedCassette =
+    clickX >= cassetteLeft &&
+    clickX <= cassetteRight &&
+    clickY >= cassetteTop &&
+    clickY <= cassetteBottom;
+
+  if (clickedCassette) {
+    if (!cassetteTouched) {
+      // First touch → tapeInsert then cassette
+      cassetteTouched = true;
+      tapeInsert.currentTime = 0;
+      tapeInsert.play();
+      tapeInsert.onended = () => {
+        cassette.currentTime = 0;
+        cassette.play();
+        cassettePlaying = true;
+
+        // Start dialogue sync
+        startScriptSync(cassette);
+      };
+    } else {
+      if (cassettePlaying) {
+        // Stop cassette
+        cassette.pause();
+        cassettePlaying = false;
+        tapeStop.currentTime = 0;
+        tapeStop.play();
+      } else {
+        // Resume cassette with tapeResume
+        cassette.play();
+        cassettePlaying = true;
+        tapeResume.currentTime = 0;
+        tapeResume.play();
+      }
+    }
+    return;
+  }
+
+  // --- Monitor area ---
+  const centerX = rect.width / 2;
+  const centerY = rect.height / 2;
+  const monitorLeft = centerX - MONITOR_WIDTH / 2;
+  const monitorRight = centerX + MONITOR_WIDTH / 2;
+  const monitorTop = centerY - MONITOR_HEIGHT / 2;
+  const monitorBottom = centerY + MONITOR_HEIGHT / 2;
+
+  const clickedMonitor =
+    clickX >= monitorLeft &&
+    clickX <= monitorRight &&
+    clickY >= monitorTop &&
+    clickY <= monitorBottom;
+
+  if (!isOn) {
+    turnOn();
+    return;
+  }
+
+  if (clickedMonitor) {
+    window.location.href = "them.html";
+  } else {
+    turnOff();
+  }
+});
+</script>
+
+
+
+</body>
+</html>

@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="robots" content="noai, noimageai, nosnippet">
   <title>Art Explorer</title>
   <link rel="icon" type="image/png" href="../img/favicon.png">
   <link rel="stylesheet" href="../styles.css">
@@ -168,6 +169,20 @@
     .close-btn:hover {
       background: #222;
     }
+
+    .bottom-text {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      text-align: center;
+      background-color: black;
+      color: white;
+      padding: 10px 0;
+      font-size: 14px;
+      border-top: 1px solid white;
+      z-index: 2;
+    }
+
   </style>
 </head>
 <body>
@@ -191,6 +206,11 @@
   <div class="viewer" id="viewer">
     <img id="viewerImage" src="">
     <div class="close-btn" id="closeViewer">Close</div>
+  </div>
+
+  <div class="bottom-text" style="text-align:center; margin-top:20px; font-size:0.9em;">
+    All artwork on this site is <strong>NOT</strong> licensed for AI training, scraping, or redistribution.
+    <span style="color: #ff0000; font-weight: bold;">Fuck Around, Find Out.</span>
   </div>
 
   <script>
@@ -234,7 +254,8 @@
       ],
       "ayyyy lmao": [
         { src: "../art/art10.png", desc: "LOADER.DMG has stopped working!" },
-        { src: "../art/art12", desc: "LOADER had enough for that day..." }
+        { src: "../art/art12", desc: "LOADER had enough for that day..." },
+        { src: "../art/art27.png", desc: "WHEEEE-" }
       ]
     };
 

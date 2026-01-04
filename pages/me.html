@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="robots" content="noai, noimageai, nosnippet">
   <title>About Me</title>
   <link rel="icon" type="../image/png" href="../img/favicon.png">
   <link rel="stylesheet" href="../styles.css">
@@ -14,7 +15,7 @@
     body {
       background-color: black;
       color: white;
-      font-family: 'LDRFont', monospace;
+      font-family: 'LDRFont', 'Noto Sans JP', 'Noto Sans', monospace;
       margin: 0;
       padding: 0;
     }
@@ -63,8 +64,14 @@
       line-height: 1.8;
       white-space: pre-wrap;
     }
+
+    .jp-mode {
+    font-family: 'Noto Sans JP', 'Noto Sans', sans-serif;
+    }
+
   </style>
 </head>
+
 <body>
 
   <div class="top-bar">
@@ -73,9 +80,14 @@
     </a>
   </div>
 
-  <div class="about-container">
-    <div class="about-title">About Me</div>
-    <div class="about-text">
+  <button id="lang-toggle" style="margin-left:auto; margin-right:20px;">
+    日本語
+  </button>
+
+<div class="about-container">
+  <div class="about-title" id="about-title">About Me</div>
+
+  <div class="about-text lang-en">
 Hi there! I'm LG10sys, I'm just your average IT guy!
 
 I'm an indie game dev, a furry (quite obvious at this point lol), a computer repair guy, and DnD enjoyer!
@@ -112,8 +124,71 @@ And I yet have to update it to thank more people like Sudipal, UI, and more for 
 
 Anyways, thanks for stopping by :3
      <!--- :D --->
-    </div>
   </div>
+
+  <div class="about-text lang-jp jp-mode" style="display:none;">
+こんにちは！LG10sysです。ごく普通のIT担当者です！
+
+私はインディーゲーム開発者で、（お察しの通り）フリーキーな一面もあり、パソコン修理が得意で、DnDも楽しんでいます。
+
+古いコンピューターや基板を集めたり、このような小さなウェブプロジェクトを作ったりするのが好きです。時々、ゴミから見つけたテクノロジーを直して遊ぶこともあります。
+
+これまで集めたものの一部はこちらです（はい、アライグマと呼んでも構いません）：
+- 完全稼働するPS3（…アップデートでWi-Fi/Bluetoothモジュールが壊れているのに気づかず、文鎮化しました…）
+- Windows 95搭載のノートパソコン
+- Sinclair ZX Spectrum
+- CRTディスプレイ
+- 多数のデスクトップPC
+- いくつかのフロッピードライブ
+- カセットプレイヤー/レコーダー
+- そしてその他たくさん！
+
+普段はTwitterやDiscordにいますが、タグは教えません。探してみてください :3
+（…ただし、個人情報はだめですよ！）
+
+----------------------------------------------------------------------------------
+
+豆知識：私は他人を信じるのが苦手です。でも、初めて会った瞬間に信用しないわけではありません。ただ慎重なんです。
+これは、私が1年生から9年生まで同じクラスだったのに、10年生で転校しなければならなくなった時に、クラス全員から見放されたからなんです。まるでもう私のことなんか気にしないみたいに。
+
+私は1年生の頃からずっと社会から疎外されていて、正直言って、もうその気持ちには慣れています。
+
+この話にはもっと続きがあって、個人的な理由で話したくないのですが、今は本当に私のことを気にかけてくれるグループを見つけました。
+私のことは心配しなくていいですよ。ただ、お知らせしているだけです。
+
+サンクスページにいるLuna、Toastoven、Reuなどは、そのグループのメンバーです。本当に感謝しています。
+Sudipalさん、UIさんなど、デジタルで私を支えてくれている方々に感謝するために、まだ更新しなくてはなりません。
+
+とにかく、立ち寄ってくれてありがとう :3
+   <!--- (´▽` ) --->
+
+  </div>
+</div>
+
+<script>
+const toggleBtn = document.getElementById("lang-toggle");
+const en = document.querySelector(".lang-en");
+const jp = document.querySelector(".lang-jp");
+const title = document.getElementById("about-title");
+
+let isJP = false;
+
+toggleBtn.addEventListener("click", () => {
+  isJP = !isJP;
+
+  if (isJP) {
+    en.style.display = "none";
+    jp.style.display = "block";
+    title.textContent = "自己紹介";
+    toggleBtn.textContent = "English";
+  } else {
+    en.style.display = "block";
+    jp.style.display = "none";
+    title.textContent = "About Me";
+    toggleBtn.textContent = "日本語";
+  }
+});
+</script>
 
 </body>
 </html>

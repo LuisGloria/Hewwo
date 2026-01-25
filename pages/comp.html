@@ -20,7 +20,6 @@
       font-family: 'LDRFont', monospace;
     }
 
-    /* ===== LAYERS ===== */
 
     .color-layer {
       position: fixed;
@@ -44,7 +43,6 @@
       image-rendering: pixelated;
       user-select: none;
 
-      /* No scaling */
       width: auto;
       height: auto;
       max-width: none;
@@ -52,7 +50,6 @@
     }
 
 
-    /* Flash effect */
     .flash {
       background-color: white !important;
       transition: none !important;
@@ -61,15 +58,13 @@
 </head>
 <body>
 
-  <!-- Color background -->
   <div class="color-layer" id="colorLayer"></div>
 
-<!-- Computer -->
 <div class="computer-layer" id="computerLayer">
   <img src="../img/computer.png" id="computerImg" alt="Computer">
 </div>
 
-<!-- Dialogue container -->
+<!-- stuff for LOADER, don't ask :3 -->
 <div id="dialogContainer" style="
   position: fixed;
   bottom: 20px;
@@ -84,13 +79,13 @@
   font-family: 'LDRFont', monospace;
 "></div>
 
-<!-- Audio -->
 <audio id="tapeInsert" src="../audio/Tapeinsert.m4a"></audio>
 <audio id="cassette" src="../audio/cassette.mp3"></audio>
 <audio id="tapeStop" src="../audio/Tapestop.mp3"></audio>
 <audio id="tapeResume" src="../audio/Taperesume.mp3"></audio>
 
 <script>
+//Well ts was painful.
 const colorLayer = document.getElementById('colorLayer');
 const computerLayer = document.getElementById('computerLayer');
 const computerImg = document.getElementById('computerImg');
@@ -98,11 +93,9 @@ const dialogContainer = document.getElementById('dialogContainer');
 
 let isOn = false;
 
-// Monitor dimensions
 const MONITOR_WIDTH = 800;
 const MONITOR_HEIGHT = 400;
 
-// Dialogue script
 const scriptLines = [
   { text: "LOADER.DMG here...", time: 0.1 },
   { text: "I managed to hack into the servers of the International Anomaly Termination Centre", time: 1.950 },
@@ -115,18 +108,15 @@ const scriptLines = [
 
 let displayedLines = [];
 
-// Audio elements
 const tapeInsert = document.getElementById('tapeInsert');
 const cassette = document.getElementById('cassette');
 const tapeStop = document.getElementById('tapeStop');
 const tapeResume = document.getElementById('tapeResume');
 
-// Cassette states
 let cassetteTouched = false;
 let cassettePlaying = false;
 let scriptSyncStarted = false;
 
-// --- Dialogue functions ---
 const MAX_LINES = 2; // max number of lines visible
 
 function addLine(text) {
@@ -138,38 +128,33 @@ function addLine(text) {
   lineBox.style.border = '1px solid white';
   lineBox.style.fontSize = '14px';
   lineBox.style.transition = 'all 0.5s ease';
-  lineBox.style.opacity = 0; // start invisible
+  lineBox.style.opacity = 0;
 
-  // Append new line at the bottom
   dialogContainer.appendChild(lineBox);
 
-  // Animate fade-in
   requestAnimationFrame(() => {
     lineBox.style.opacity = 1;
   });
 
-  // Move existing lines up and fade
   displayedLines.forEach((oldLine, i) => {
-    oldLine.style.transform = `translateY(24px)`; // push up by 24px
-    oldLine.style.opacity = 0.6; // fade older lines
+    oldLine.style.transform = `translateY(24px)`;
+    oldLine.style.opacity = 0.6;
   });
 
-  // Add the new line to the array of displayed lines
   displayedLines.push(lineBox);
 
-  // Remove oldest line if we exceed max
   if (displayedLines.length > MAX_LINES) {
-    const oldLine = displayedLines.shift(); // remove the first (oldest)
+    const oldLine = displayedLines.shift();
     oldLine.style.opacity = 0;
-    oldLine.style.transform = `translateY(24px)`; // move slightly up
+    oldLine.style.transform = `translateY(24px)`;
     setTimeout(() => {
       oldLine.remove();
-    }, 500); // wait for transition
+    }, 500);
   }
 }
 
 function startScriptSync(audioElement) {
-  if (scriptSyncStarted) return; // prevent multiple loops
+  if (scriptSyncStarted) return;
   scriptSyncStarted = true;
   let nextLineIndex = 0;
 
@@ -190,7 +175,6 @@ function startScriptSync(audioElement) {
   requestAnimationFrame(tick);
 }
 
-// --- Computer power functions ---
 function turnOn() {
   isOn = true;
   colorLayer.classList.add('flash');
@@ -204,7 +188,6 @@ function turnOff() {
   isOn = false;
   colorLayer.style.backgroundColor = 'black';
 
-  // Stop cassette if playing
   if (cassettePlaying) {
     cassette.pause();
     cassette.currentTime = 0;
@@ -212,13 +195,11 @@ function turnOff() {
   }
 }
 
-// --- Computer click handler ---
 computerLayer.addEventListener('click', (e) => {
   const rect = computerImg.getBoundingClientRect();
   const clickX = e.clientX - rect.left;
   const clickY = e.clientY - rect.top;
 
-  // --- Cassette area ---
   const cassetteLeft = 110;
   const cassetteRight = 346;
   const cassetteTop = 541;
@@ -232,7 +213,6 @@ computerLayer.addEventListener('click', (e) => {
 
   if (clickedCassette) {
     if (!cassetteTouched) {
-      // First touch → tapeInsert then cassette
       cassetteTouched = true;
       tapeInsert.currentTime = 0;
       tapeInsert.play();
@@ -241,18 +221,15 @@ computerLayer.addEventListener('click', (e) => {
         cassette.play();
         cassettePlaying = true;
 
-        // Start dialogue sync
         startScriptSync(cassette);
       };
     } else {
       if (cassettePlaying) {
-        // Stop cassette
         cassette.pause();
         cassettePlaying = false;
         tapeStop.currentTime = 0;
         tapeStop.play();
       } else {
-        // Resume cassette with tapeResume
         cassette.play();
         cassettePlaying = true;
         tapeResume.currentTime = 0;
@@ -262,7 +239,7 @@ computerLayer.addEventListener('click', (e) => {
     return;
   }
 
-  // --- Monitor area ---
+  //Will change this later...
   const centerX = rect.width / 2;
   const centerY = rect.height / 2;
   const monitorLeft = centerX - MONITOR_WIDTH / 2;

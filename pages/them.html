@@ -173,6 +173,23 @@
       font-size: 12px;
     }
 
+    #boot-screen {
+      position: fixed;
+      inset: 0;
+      background: black;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+
+    #boot-image {
+      image-rendering: pixelated;
+      max-width: 100%;
+      max-height: 100%;
+    }
+
+
     .start-item {
       padding: 4px 8px;
       cursor: pointer;
@@ -184,6 +201,15 @@
   </style>
 </head>
 <body>
+
+
+<audio id="hdspin" src="../audio/hdspin.mp3" preload="auto"></audio>
+<audio id="biosbeep" src="../audio/BIOSBEEP.mp3" preload="auto"></audio>
+<audio id="biosbeep2" src="../audio/BIOSBEEP2.mp3" preload="auto"></audio>
+
+<div id="boot-screen">
+  <img id="boot-image" src="../img/hardcheck.gif">
+</div>
 
 <div class="desktop">
 
@@ -220,6 +246,7 @@
 </div>
 
 <script>
+  // Updating this was pure h e l l
   const win = document.getElementById('window');
   const header = document.getElementById('window-header');
   const title = document.getElementById('window-title');
@@ -228,6 +255,11 @@
   const startBtn = document.getElementById('start-btn');
   const startMenu = document.getElementById('start-menu');
   const shutdown = document.getElementById('shutdown');
+  const bootScreen = document.getElementById('boot-screen');
+  const bootImage = document.getElementById('boot-image');
+  const hdspin = document.getElementById('hdspin');
+  const biosbeep = document.getElementById('biosbeep');
+  const biosbeep2 = document.getElementById('biosbeep2');
   const files = [
   { id: 1, name: 'LOADER' },
   { id: 2, name: 'ZILO' },
@@ -235,6 +267,90 @@
   { id: 4, name: 'FX' },
   { id: 5, name: 'SID' },
   ];
+
+  let bootStage = 0;
+  let waitingEnter = false;
+
+  function playFrameSequence(prefix, frameCount, frameDelay, onFinish) {
+    let frame = 1;
+    let finished = false;
+
+    function nextFrame() {
+      if (finished) return;
+
+      bootImage.src = `${prefix}${frame}.png?t=${Date.now()}`;
+
+      // Last frame, why do you force me to use === JavaScript?
+      if (frame === frameCount) {
+        finished = true;
+
+        setTimeout(() => {
+          onFinish?.();
+        }, frameDelay);
+        return;
+      }
+      frame++;
+      setTimeout(nextFrame, frameDelay);
+    }
+    nextFrame();
+  }
+
+  function startBoot() {
+
+    hdspin.play().catch(()=>{});
+    playFrameSequence("../img/initframes/hardcheck_frames", 15, 2000, () => {
+
+      bootImage.style.display = "none";
+      biosbeep.play().catch(()=>{});
+
+      setTimeout(() => {
+        bootImage.style.display = "block";
+        bootStage = 1;
+
+        playFrameSequence("../img/initframes/initV_frames", 25, 1000, () => {
+
+          bootStage = 2;
+          waitingEnter = true;
+          biosbeep2.play().catch(()=>{});
+
+        });
+      }, 2000);
+    });
+  }
+
+  startBoot();
+
+  document.addEventListener("keydown", e => {
+
+    if (e.key !== "Enter") return;
+    if (!waitingEnter) return;
+    if (bootStage === 2) {
+
+      waitingEnter = false;
+
+      bootImage.style.display = "none";
+      // Wait x seconds, remember to put actual code inside this time dumbass
+      setTimeout(() => {
+
+        bootImage.style.display = "block";
+        bootImage.src = "../img/zLOGON.png";
+        bootStage = 3;
+        waitingEnter = true;
+
+      }, 1000);
+      return;
+    }
+
+    if (bootStage === 3) {
+      waitingEnter = false;
+
+      setTimeout(() => {
+      bootScreen.remove();
+
+      }, 1000);
+      return;
+    }
+  });
 
   document.querySelectorAll('.icon').forEach(icon => {
     icon.addEventListener('dblclick', () => {
@@ -330,8 +446,7 @@
       startMenu.style.display = 'none';
     }
   });
-
+  // Damn...453 lines for a single html file? Ik this is HTML + CSS + JS in a single file, but damn!
 </script>
-
 </body>
 </html>

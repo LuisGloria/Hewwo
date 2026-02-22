@@ -68,9 +68,54 @@
       font-size: 14px;
       margin-top: 5px;
     }
+
+  .window {
+    position: absolute;
+    background: #000;
+    border: 2px solid #fff;
+    display: none;
+    flex-direction: column;
+    z-index: 100;
+  }
+
+  .window-header {
+    height: 22px;
+    line-height: 22px;
+    padding: 0 6px;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #fff;
+    cursor: move;
+    font-size: 13px;
+  }
+
+  .window-close {
+    color: red;
+    cursor: pointer;
+  }
+
+  .window-content {
+    padding: 10px;
+    background: black;
+    font-size: 13px;
+  }
+
+  .cin-special img:hover {
+    filter: drop-shadow(0 0 8px red) drop-shadow(0 0 16px red);
+    cursor: pointer;
+    transition: 0.2s;
+   }
+
   </style>
 </head>
 <body>
+  <div class="window" id="cinWindow">
+    <div class="window-header" id="cinHeader">
+      <span id="cinTitle">Message</span>
+      <span class="window-close" id="cinClose">X</span>
+    </div>
+    <div class="window-content" id="cinContent"></div>
+  </div>
 
   <div class="top-bar">
     <a href="../index.html">
@@ -143,11 +188,29 @@
       <div class="sprite-desc">Thank you for helping me with Vtuber stuff!</div>
     </div>
 
-    <div class="sprite-entry">
-      <img src="../img/CIN.png" alt="CINCOBOY06">
+    <div class="sprite-entry cin-special">
+      <img src="../img/CIN2.png" alt="CINCOBOY06" id="cinPfp">
       <div class="sprite-name">CINCOBOY06</div>
       <div class="sprite-desc">Thank you for being my best online friend!</div>
     </div>
+
+  <!-- Feel like I screwed up the window logic here...oh well, if it works, it works lol-->
+  <div class="window" id="cinWindow" style="top:120px; left:120px;">
+
+    <div class="window-header" id="cinHeader">
+      <span>RESTRICTED ACCESS</span>
+      <span class="window-close" id="cinClose">X</span>
+    </div>
+
+  <div class="window-content">
+    <div class="header">
+      <span>WARNING: EVERYTHING ON THE "SYNTHETIC HUMAN RESEARCH INSTITUTE" PAGE IS FOR LEVEL 3 RESEARCHERS \n PROCEED ONLY IF YOU'RE ONE</span>
+    </div>
+
+    <button onclick="window.open('https://daemon.cincoboy06.xyz/', '_blank')">
+      PROCEED
+    </button>
+  </div>
 
   </div>
   <!-- I'LL MAKE -->
@@ -181,8 +244,75 @@
     <br>
     With love -LG10sys!
   </footer>
-
   </div>
+  <script>
+    const cinPfp = document.getElementById("cinPfp");
+    const cinWindow = document.getElementById("cinWindow");
+    const cinHeader = document.getElementById("cinHeader");
+    const cinClose = document.getElementById("cinClose");
+    const cinContent = document.getElementById("cinContent");
+    const cinTitle = document.getElementById("cinTitle");
 
+    cinPfp.onclick = () => {
+      cinWindow.style.display = "flex";
+      cinWindow.style.top = "120px";
+      cinWindow.style.left = "160px";
+
+      cinTitle.textContent = "RESTRICTED ACCESS";
+
+      cinContent.innerHTML = `
+        <div style="display:flex; align-items:center; gap:10px;">
+          <img src="../img/SHRI.png"
+              style="image-rendering:pixelated;">
+          <div style="color:#ff0000;">
+          <div>RESTRICTED ACCESS<br>
+               ONLY LEVEL 3 RESEARCHERS MAY ACCESS DAEMON'S PAGE, ANY UNAUTHORIZED ACCESS WILL BE LOGGED<br>
+               <br>
+               DO NOT PROCEED IF YOU'RE NOT A LEVEL 3 RESEARCHER<br>
+          </div>
+        </div>
+
+        <br>
+
+        <button onclick="window.open('https://daemon.cincoboy06.xyz/', '_blank')">
+          PROCEED
+        </button>
+
+        <button onclick="document.getElementById('cinWindow').style.display='none'">
+          CANCEL
+        </button>
+      </div>
+
+      `;
+    };
+
+    cinClose.onclick = () => cinWindow.style.display = "none";
+
+    let draggingCin = false, offXcin = 0, offYcin = 0;
+
+    cinHeader.onmousedown = e => {
+      draggingCin = true;
+      offXcin = e.clientX - cinWindow.offsetLeft;
+      offYcin = e.clientY - cinWindow.offsetTop;
+    };
+
+    document.onmousemove = e => {
+      if (!draggingCin) return;
+      cinWindow.style.left = (e.clientX - offXcin) + "px";
+      cinWindow.style.top  = (e.clientY - offYcin) + "px";
+    };
+
+    document.onmouseup = () => draggingCin = false;
+
+    const cin = document.getElementById('cinPfp');
+
+    cin.addEventListener('mouseover', () => {
+      cin.src = '../img/CIN.png';
+    });
+
+    cin.addEventListener('mouseout', () => {
+      cin.src = '../img/CIN2.png';
+    });
+  </script>
 </body>
 </html>

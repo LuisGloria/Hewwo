@@ -106,6 +106,15 @@
     transition: 0.2s;
    }
 
+  .sprite-entry.special-link img {
+    transition: 0.2s;
+  }
+
+  .sprite-entry.special-link:hover img {
+    filter: drop-shadow(0 0 8px var(--glow-color)) drop-shadow(0 0 16px var(--glow-color));
+    cursor: pointer;
+  }
+
   </style>
 </head>
 <body>
@@ -140,13 +149,13 @@
         <div class="sprite-desc">Thanks for getting me out of my comfort zone!</div>
       </div>
 
-      <div class="sprite-entry">
+      <div class="sprite-entry special-link" data-url="https://kamex.carrd.co/" style="--glow-color:#bee8fe;">
         <img src="../img/KAMEX.png" alt="ACE">
         <div class="sprite-name">ACE KAMEX</div>
         <div class="sprite-desc">Thank you for noticing my work and sharing it!</div>
       </div>
 
-      <div class="sprite-entry">
+      <div class="sprite-entry special-link" data-url="https://youtube.com/RetroSpecter" style="--glow-color:#17d8e5;">
         <img src="../img/RETRO.png" alt="RETRO">
         <div class="sprite-name">RETROSPECTER</div>
         <div class="sprite-desc">Thank you for making your source code available!</div>
@@ -158,7 +167,7 @@
         <div class="sprite-desc">Thank you for being the best friend I could ever as for!</div>
       </div>
 
-      <div class="sprite-entry">
+      <div class="sprite-entry special-link" data-url="https://felidae.bam.moe/" style="--glow-color:#fff1f1;">
         <img src="../img/LISA.png" alt="LISA">
         <div class="sprite-name">LISA</div>
         <div class="sprite-desc">Thanks for teaching me the art of VM/ESA!</div>
@@ -176,13 +185,13 @@
       <div class="sprite-desc">They intoduced me to rhythm games!</div>
     </div>
 
-    <div class="sprite-entry">
+    <div class="sprite-entry special-link" data-url="https://www.youtube.com/@Rixian" style="--glow-color:#cc0001;">
       <img src="../img/RIXIAN.png" alt="RIXIAN">
       <div class="sprite-name">RIXIAN</div>
       <div class="sprite-desc">You introduced me to OneShot!</div>
     </div>
 
-    <div class="sprite-entry">
+    <div class="sprite-entry special-link" data-url="https://deuteriumneurodivergence.carrd.co/" style="--glow-color:#221e3f;">
       <img src="../img/DEUT.png" alt="DEUTERIUM">
       <div class="sprite-name">DEUTERIUM</div>
       <div class="sprite-desc">Thank you for helping me with Vtuber stuff!</div>
@@ -192,6 +201,12 @@
       <img src="../img/CIN2.png" alt="CINCOBOY06" id="cinPfp">
       <div class="sprite-name">CINCOBOY06</div>
       <div class="sprite-desc">Thank you for being my best online friend!</div>
+    </div>
+
+    <div class="sprite-entry special-link" data-url="https://bsky.app/profile/idaawz.bsky.social" style="--glow-color:#fa4f91;">
+      <img src="../img/INDIE.png" alt="INDIE">
+      <div class="sprite-name">INDIE</div>
+      <div class="sprite-desc">Thank you for the art trade!</div>
     </div>
 
   <!-- Feel like I screwed up the window logic here...oh well, if it works, it works lol-->
@@ -238,6 +253,8 @@
     Thank you Rixian for introducing me to OneShot trough a random video of yours I found on the web lmao<br>
     <br>
     Thank you for helping me with Vtuber stuff (deforms still kill me lmao)!<br>
+    <br>
+    Thank you Indie for that art trade of Zilo! Looks really good!<br>
     <br>
     And thank you Cincoboy06 for being one of the best online friends I have ever had (...Still kinda like you.)!<br>
     <br>
@@ -312,6 +329,13 @@
 
     cin.addEventListener('mouseout', () => {
       cin.src = '../img/CIN2.png';
+    });
+
+    document.querySelectorAll('.sprite-entry.special-link').forEach(entry => {
+      entry.addEventListener('click', () => {
+        const url = entry.getAttribute('data-url');
+        window.open(url, '_blank');
+      });
     });
   </script>
 </body>

@@ -1,55 +1,104 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="robots" content="noai, noimageai, nosnippet">
-  <title>404 - Not Found</title>
-  <link rel="icon" type="image/png" href="img/favicon.png">
-  <style>
-    @font-face {
-      font-family: 'LDRFont';
-      src: url('fonts/LDRFnt.ttf') format('truetype');
-    }
+<meta charset="UTF-8">
+<meta name="robots" content="noai, noimageai, nosnippet">
+<title>404 - Not Found</title>
+<link rel="icon" type="image/png" href="img/favicon.png">
 
-    body {
-      background-color: black;
-      color: white;
-      font-family: 'LDRFont', monospace;
-      margin: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      text-align: center;
-    }
+<style>
+@font-face {
+  font-family: 'LDRFont';
+  src: url('fonts/LDRFnt.ttf') format('truetype');
+}
 
-    img {
-      image-rendering: pixelated;
-      max-width: 80%;
-      height: auto;
-    }
+body {
+  margin: 0;
+  overflow: hidden;
+  background: black;
+  font-family: 'LDRFont', monospace;
+  color: white;
+}
 
-    .text {
-      margin-top: 20px;
-      font-size: 20px;
-    }
+.bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: url("img/404.gif") no-repeat center center;
+  background-size: cover;
+  image-rendering: pixelated;
+  z-index: 2;
+}
 
-    a {
-      color: cyan;
-      text-decoration: none;
-      font-size: 16px;
-    }
+.static {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url("img/tv_noise.gif");
+  opacity: 0.18;
+  mix-blend-mode: screen;
+  z-index: 1;
+  pointer-events: none;
+}
 
-    a:hover {
-      text-decoration: underline;
-    }
-  </style>
+.lost {
+  position: fixed;
+  top: 70px;
+  right: 60px;
+  font-size: 26px;
+  z-index: 3;
+  text-shadow: 0 0 8px black;
+}
+
+.big404 {
+  position: fixed;
+  bottom: 10px;
+  left: 750px;
+  font-size: 160px;
+  z-index: 3;
+  cursor: text;
+  text-shadow: 0 0 15px black;
+}
+
+.credit {
+  position: fixed;
+  top: 110px;
+  right: 60px;
+  font-size: 18px;
+  z-index: 3;
+  text-shadow: 0 0 8px black;
+}
+
+.credit a {
+  color: #0000FF;
+  text-decoration: none;
+}
+
+.credit a:hover {
+  text-decoration: underline;
+}
+
+</style>
 </head>
+
 <body>
 
-  <!-- TkFNRTouLi4uLi4uLi4uLlpJTE8gW1JFREFDVEVEXQ0KQUdFOi4uLi4uLi4uLi4uLjIxDQpTRVg6Li4uLi4uLi4uLi4uTQ0KR0VOREVSOi4uLi4uLi4uLk5PTkJJTkFSWQ0KSUQ6Li4uLi4uLi4uLi4uLkM6MCB8IElOOjE5NzYNCg0KQUNBREVNSUNTLi4uLi46DQogICAgREVHUkVFUy4uLjogSElHSCBTQ0hPT0wgREVHUkVFIC0gSEFSRFdBUkUNCiAgICAgICAgICAgICAgICBCQUNIRUxPUidTIERFR1JFRSAgLSBNQUlORlJBTUVTDQogICAgDQogICAgTElDRU5TRVMuLjogQU1BVEVVUiBFWFRSQSBMSUNFTlNFIC0gSEFNL1JBRElPDQogICAgICAgICAgICAgICAgRFJJVkVSJ1MgTElDRU5TRQ0KDQpERVNDUklQVElPTi4uLjogWklMTyBXQVMgQk9STiBJTiAyMDA0LCBJVCBIQVMgRVhDRVBUSU9OQUwgQUNBREVNSUMgU0NPUkVTIFdIRU4gSVQgQ09NRVMgVE8gSEFSRFdBUkUgQU5EIFJFTEFURUQgQ0xBU1NFUywNCiAgICAgICAgICAgICAgICBJVCdTIENVUlJFTlRMWSBGUkVRVUVOVElORyBbUkVEQUNURURdLA0KICAgICAgICAgICAgICAgIE9GVEVOIFNFQVJDSEVTIElOU0lERSBFLVdBU1RFIFJFQ1lDTElORyBCSU5TIEZPUiBPTEQgT1IgU1RJTEwgVVNFRlVMIEhBUkRXQVJFLA0KICAgICAgICAgICAgICAgIE9GVEVOIFVTRVMgSEFNIFJBRElPIFRPIENPTU1VTklDQVRFLA0KICAgICAgICAgICAgICAgIERPRVMgTk9UIEhBVkUgTUFOWSBGUklFTkRTLg0KICAgICAgICAgICAgICAgIA0KUFNZLi4uLi4uLi4uLi46IFpJTE8gSEFTIE1PREVSQVRFIEFOWElFVFkgRElTT1JERVIsIFRBS0VTIE1FRFMgVE8gS0VFUCBJVCBDT05UUk9MTEVEIFtCVVNQSVJPTkVdLA0KICAgICAgICAgICAgICAgICAgICAgSEFTIE1PREVSQVRFIFBPU1QgVFJBVU1BVElDIFNUUkVTUyBESVNSREVSLCBUQUtFUyBNRURTIFRPIEtFRVAgSVQgQ09OVFJPTExFRCBbWk9MT0ZUXS4NCiAgICAgICAgICAgICAgICAgICAgIA0KRklOQUwgTk9URVMuLi46IFtTRUNUSU9OIFJFREFDVEVEXQ== -->
-  <img src="img/404.gif" alt="404 GIF">
+<div class="bg"></div>
+<div class="static"></div>
+
+<div class="lost">You're lost, aren't ya?</div>
+
+<div class="credit">
+  Art made by <a href="https://bsky.app/profile/idaawz.bsky.social" target="_blank">Indie</a>
+</div>
+
+<div class="big404" contenteditable="true">
+  404
+</div>
 
 </body>
 </html>

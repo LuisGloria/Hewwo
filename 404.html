@@ -62,6 +62,45 @@ body {
   z-index: 3;
   cursor: text;
   text-shadow: 0 0 15px black;
+  position: fixed;
+}
+
+/* duplicate layers */
+.big404::before,
+.big404::after {
+  content: attr(data-text);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  overflow: hidden;
+  background: transparent;
+}
+
+/* top glitch slice */
+.big404::before {
+  clip-path: inset(0 0 65% 0);
+  transform: translateX(-6px);
+  animation: glitchTop 0.05s infinite linear alternate-reverse;
+}
+
+/* bottom glitch slice */
+.big404::after {
+  clip-path: inset(65% 0 0 0);
+  transform: translateX(6px);
+  animation: glitchBottom 0.05s infinite linear alternate-reverse;
+}
+
+@keyframes glitchTop {
+  0%   { transform: translateX(-6px); }
+  50%  { transform: translateX(6px); }
+  100% { transform: translateX(-2px); }
+}
+
+@keyframes glitchBottom {
+  0%   { transform: translateX(6px); }
+  50%  { transform: translateX(-6px); }
+  100% { transform: translateX(2px); }
 }
 
 .credit {
@@ -99,7 +138,7 @@ body {
   </a>
 </div>
 
-<div class="big404" contenteditable="true">
+<div class="big404" contenteditable="true" data-text="404">
   404
 </div>
 
